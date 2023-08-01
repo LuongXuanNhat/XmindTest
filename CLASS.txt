@@ -1,0 +1,263 @@
+// Root myDeserializedClass = JsonConvert.DeserializeObject<List<Root>>(myJsonResponse);
+    public class Attached
+    {
+        public string id { get; set; }
+        public string title { get; set; }
+        public Notes notes { get; set; }
+        public Children children { get; set; }
+        public List<Boundary> boundaries { get; set; }
+        public Position position { get; set; }
+    }
+
+    public class Boundary
+    {
+        public string id { get; set; }
+        public string range { get; set; }
+        public Style style { get; set; }
+        public string title { get; set; }
+    }
+
+    public class Boundary3
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class CalloutTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class CentralTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class Children
+    {
+        public List<Attached> attached { get; set; }
+        public List<Detached> detached { get; set; }
+    }
+
+    public class Content
+    {
+        public string centralTopic { get; set; }
+        public string mainTopic { get; set; }
+    }
+
+    public class Detached
+    {
+        public string id { get; set; }
+        public string title { get; set; }
+        public Position position { get; set; }
+        public Children children { get; set; }
+    }
+
+    public class ExpiredTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class Extension
+    {
+        public string provider { get; set; }
+        public Content content { get; set; }
+    }
+
+    public class FloatingTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class ImportantTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class MainTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class Map
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class MinorTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class Notes
+    {
+        public Plain plain { get; set; }
+        public RealHTML realHTML { get; set; }
+    }
+
+    public class Plain
+    {
+        public string content { get; set; }
+    }
+
+    public class Position
+    {
+        public double x { get; set; }
+        public double y { get; set; }
+    }
+
+    public class Properties
+    {
+        [JsonProperty("fill-pattern")]
+        public string fillpattern { get; set; }
+
+        [JsonProperty("svg:fill")]
+        public string svgfill { get; set; }
+
+        [JsonProperty("border-line-color")]
+        public string borderlinecolor { get; set; }
+
+        [JsonProperty("fo:text-decoration")]
+        public string fotextdecoration { get; set; }
+
+        [JsonProperty("fo:font-family")]
+        public string fofontfamily { get; set; }
+
+        [JsonProperty("fo:font-size")]
+        public string fofontsize { get; set; }
+
+        [JsonProperty("fo:font-weight")]
+        public string fofontweight { get; set; }
+
+        [JsonProperty("fo:font-style")]
+        public string fofontstyle { get; set; }
+
+        [JsonProperty("fo:color")]
+        public string focolor { get; set; }
+
+        [JsonProperty("fo:text-transform")]
+        public string fotexttransform { get; set; }
+
+        [JsonProperty("fo:text-align")]
+        public string fotextalign { get; set; }
+
+        [JsonProperty("line-width")]
+        public string linewidth { get; set; }
+
+        [JsonProperty("line-color")]
+        public string linecolor { get; set; }
+
+        [JsonProperty("line-pattern")]
+        public string linepattern { get; set; }
+
+        [JsonProperty("shape-class")]
+        public string shapeclass { get; set; }
+
+        [JsonProperty("arrow-begin-class")]
+        public string arrowbeginclass { get; set; }
+
+        [JsonProperty("arrow-end-class")]
+        public string arrowendclass { get; set; }
+
+        [JsonProperty("multi-line-colors")]
+        public string multilinecolors { get; set; }
+
+        [JsonProperty("color-list")]
+        public string colorlist { get; set; }
+
+        [JsonProperty("line-tapered")]
+        public string linetapered { get; set; }
+
+        [JsonProperty("border-line-width")]
+        public string borderlinewidth { get; set; }
+
+        [JsonProperty("border-line-pattern")]
+        public string borderlinepattern { get; set; }
+
+        [JsonProperty("line-class")]
+        public string lineclass { get; set; }
+
+        [JsonProperty("alignment-by-level")]
+        public string alignmentbylevel { get; set; }
+    }
+
+    public class RealHTML
+    {
+        public string content { get; set; }
+    }
+
+    public class Relationship
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class Root
+    {
+        public string id { get; set; }
+        public string @class { get; set; }
+        public RootTopic rootTopic { get; set; }
+        public string title { get; set; }
+        public List<Extension> extensions { get; set; }
+        public Theme theme { get; set; }
+    }
+
+    public class RootTopic
+    {
+        public string id { get; set; }
+        public string @class { get; set; }
+        public string title { get; set; }
+        public Children children { get; set; }
+    }
+
+    public class Style
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class SubTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class Summary
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class SummaryTopic
+    {
+        public string id { get; set; }
+        public Properties properties { get; set; }
+    }
+
+    public class Theme
+    {
+        public CentralTopic centralTopic { get; set; }
+        public MainTopic mainTopic { get; set; }
+        public SubTopic subTopic { get; set; }
+        public CalloutTopic calloutTopic { get; set; }
+        public SummaryTopic summaryTopic { get; set; }
+        public FloatingTopic floatingTopic { get; set; }
+        public ImportantTopic importantTopic { get; set; }
+        public MinorTopic minorTopic { get; set; }
+        public ExpiredTopic expiredTopic { get; set; }
+        public Boundary boundary { get; set; }
+        public Summary summary { get; set; }
+        public Relationship relationship { get; set; }
+        public Map map { get; set; }
+        public string skeletonThemeId { get; set; }
+        public string colorThemeId { get; set; }
+    }
+
