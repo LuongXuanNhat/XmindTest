@@ -313,7 +313,10 @@ namespace XmindTest
                 childenTopic = new List<ChildrenTopic> { }
             });
             var result = childTopic.childenTopic.Where(x => x.id == 10).FirstOrDefault();
+
+            // Check Child_RootTopic
             Assert.Equal(2, rootTopic.children.Count);
+            // Check Child of Chile_Topic
             Assert.Equal("Subtopic Child 2", result.title);
 
         }
