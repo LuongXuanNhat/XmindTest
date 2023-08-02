@@ -1,9 +1,7 @@
 ﻿namespace XmindTest
 {
-    public class ChildrenTopic
+    public class ChildrenTopic : RootTopic
     {
-        public int id { get; set; }
-        public string title { get;  set; }
-        public List<ChildrenTopic> childenTopic { get; set; } = null;
+
     }
 }
