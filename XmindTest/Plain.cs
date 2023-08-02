@@ -1,6 +1,6 @@
 ﻿namespace XmindTest
 {
-    internal class Plain
+    public class Plain
     {
         public Plain()
         {

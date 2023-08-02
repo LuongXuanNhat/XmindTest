@@ -16,100 +16,9 @@ namespace XmindTest
         [Fact] 
         public void Create_File()
         {
-            var root = new Root()
-            {
-                id = 1,
-                title = "Central Topic",
-                rootTopic = new List<RootTopic>()
-                {
-                    new RootTopic()
-                    {
-                        id = 1,
-                        title = "Main Topic1",
-                        href = "abc.xyz",
-                        Notes = new Notes()
-                        {
-                            plain = new Plain()
-                            {
-                                content = "content"
-                            },
-                            readHTML = new ReadHTML()
-                            {
-                                content = "content"
-                            }
-                        },
-                        children = new List<ChildrenTopic>()
-                        {
-                            ///// 
-                        }
-                    },
-                    new RootTopic()
-                    {
-                        id = 2,
-                        title = "Main Topic2",
-                        href = "abc.xyz",
-                        Notes = new Notes()
-                        {
-                            plain = new Plain()
-                            {
-                                content = "content"
-                            },
-                            readHTML = new ReadHTML()
-                            {
-                                content = "content"
-                            }
-                        },
-                        children = new List<ChildrenTopic>()
-                        {
-                            ///// 
-                        }
-                    },
-                    new RootTopic()
-                    {
-                        id = 3,
-                        title = "Main Topic3",
-                        href = "abc.xyz",
-                        Notes = new Notes()
-                        {
-                            plain = new Plain()
-                            {
-                                content = "content"
-                            },
-                            readHTML = new ReadHTML()
-                            {
-                                content = "content"
-                            }
-                        },
-                        children = new List<ChildrenTopic>()
-                        {
-                            ///// 
-                        }
-                    },
-                    new RootTopic()
-                    {
-                        id = 4,
-                        title = "Main Topic4",
-                        href = "abc.xyz",
-                        Notes = new Notes()
-                        {
-                            plain = new Plain()
-                            {
-                                content = "content"
-                            },
-                            readHTML = new ReadHTML()
-                            {
-                                content = "content"
-                            }
-                        },
-                        children = new List<ChildrenTopic>()
-                        {
-                            ///// 
-                        }
-                    }
+            var root = new Root();
+            root.CreateNewMap();
 
-                },
-
-            };
             Assert.NotNull(root);
             Assert.Equal(root.rootTopic.Count, 4);
         }
@@ -202,7 +111,7 @@ namespace XmindTest
                         id = 1,
                         title = "Main Topic1",
                         href = "abc.xyz",
-                        Notes = new Notes()
+                        notes = new Notes()
                         {
                             plain = new Plain()
                             {
@@ -213,7 +122,7 @@ namespace XmindTest
                                 content = "content"
                             }
                         },
-                        children = new List<ChildrenTopic>()
+                        rootChild = new List<ChildrenTopic>()
                         {
                             ///// 
                         }
@@ -223,7 +132,7 @@ namespace XmindTest
                         id = 2,
                         title = "Main Topic2",
                         href = "abc.xyz",
-                        Notes = new Notes()
+                        notes = new Notes()
                         {
                             plain = new Plain()
                             {
@@ -234,7 +143,7 @@ namespace XmindTest
                                 content = "content"
                             }
                         },
-                        children = new List<ChildrenTopic>()
+                        rootChild = new List<ChildrenTopic>()
                         {
                             ///// 
                         }
@@ -244,7 +153,7 @@ namespace XmindTest
                         id = 3,
                         title = "Main Topic3",
                         href = "abc.xyz",
-                        Notes = new Notes()
+                        notes = new Notes()
                         {
                             plain = new Plain()
                             {
@@ -255,7 +164,7 @@ namespace XmindTest
                                 content = "content"
                             }
                         },
-                        children = new List<ChildrenTopic>()
+                        rootChild = new List<ChildrenTopic>()
                         {
                             ///// 
                         }
@@ -265,7 +174,7 @@ namespace XmindTest
                         id = 4,
                         title = "Main Topic4",
                         href = "abc.xyz",
-                        Notes = new Notes()
+                        notes = new Notes()
                         {
                             plain = new Plain()
                             {
@@ -276,7 +185,7 @@ namespace XmindTest
                                 content = "content"
                             }
                         },
-                        children = new List<ChildrenTopic>()
+                        rootChild = new List<ChildrenTopic>()
                         {
                             ///// 
                         }
@@ -288,7 +197,7 @@ namespace XmindTest
 
             // ChildeTopic of RootTopic
             var rootTopic = root.rootTopic.FirstOrDefault();
-            rootTopic.children.AddRange(new List<ChildrenTopic>()
+            rootTopic.rootChild.AddRange(new List<ChildrenTopic>()
             {
                 new ChildrenTopic()
                 {
@@ -305,7 +214,7 @@ namespace XmindTest
             });
 
             // ChildeTopic of ChildeTopic
-            var childTopic = rootTopic.children.Where(x=>x.id == 1).FirstOrDefault();
+            var childTopic = rootTopic.rootChild.Where(x=>x.id == 1).FirstOrDefault();
             childTopic.childenTopic.Add(new ChildrenTopic()
             {
                 id = 10,
@@ -315,7 +224,7 @@ namespace XmindTest
             var result = childTopic.childenTopic.Where(x => x.id == 10).FirstOrDefault();
 
             // Check Child_RootTopic
-            Assert.Equal(2, rootTopic.children.Count);
+            Assert.Equal(2, rootTopic.rootChild.Count);
             // Check Child of Chile_Topic
             Assert.Equal("Subtopic Child 2", result.title);
 

@@ -1,12 +1,12 @@
 ﻿namespace XmindTest
 {
-    internal class Notes
+    public class Notes
     {
         public Notes()
         {
         }
 
-        public Plain plain { get; internal set; }
-        public ReadHTML readHTML { get; internal set; }
+        public Plain plain { get; set; }
+        public ReadHTML readHTML { get; set; }
     }
 }

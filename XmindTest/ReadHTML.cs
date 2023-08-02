@@ -1,6 +1,6 @@
 ﻿namespace XmindTest
 {
-    internal class ReadHTML
+    public class ReadHTML
     {
         public ReadHTML()
         {
