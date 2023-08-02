@@ -9,10 +9,10 @@
         {
             this.title = title;
             this.id = id;
-            href = "";
-            notes = new Notes();
-            relationShip = new List<RelationShip>();
-            rootChild = new List<ChildrenTopic>();
+            this.href = "";
+            this.notes = new Notes();
+            this.relationShip = new List<RelationShip>();
+            this.rootChild = new List<ChildrenTopic>();
         }
 
         public void CreateChildTopic(int id, string title)
@@ -20,10 +20,10 @@
             if(this.rootChild == null)
                 this.rootChild = new List<ChildrenTopic>();
 
-            var rootChild = new ChildrenTopic();
-            rootChild.CreateChild(id, title);
+            var Child = new ChildrenTopic();
+            Child.CreateChild(id, title);
 
-            this.rootChild.Add(rootChild); 
+            this.rootChild.Add(Child); 
         }
 
         public bool FindRootChild(int idExpected)

@@ -72,16 +72,37 @@ namespace XmindTest
         [Fact]
         public void Delete_ChildTopic()
         {
+            // rootTopic
             var rootTopic = new RootTopic();
             rootTopic.CreateDetachedRootTopic(10, "Floating Topic");
 
+            // rootTopic -> rootChild
             rootTopic.CreateChildTopic(6, "Subtopic 1");
+
+            // rootTopic -> rootChild -> rootChild
             var childTopic = rootTopic.rootChild.First();
             int idExpected = childTopic.id;
-            childTopic.rootChild = new List<ChildrenTopic>();
-            childTopic.rootChild.Add(childTopic.CreateChild(7, "Subtopic child 1"));
+            childTopic.CreateChildTopic(7, "Subtopic child 1");
+
+            rootTopic.rootChild.Remove(childTopic);
 
             Assert.False(rootTopic.FindRootChild(idExpected));
         }
+
+        [Fact]
+        public void Pull_RootTopic_Out_Of_Branch()
+        {
+            var root = new Root();
+            root.CreateNewMap(1, "Central Topic");
+
+            var root_Topic = new RootTopic();
+            root_Topic = root.rootTopic.First();
+            root.rootTopic.Remove(root_Topic);
+
+            Assert.Equal(root.rootTopic.Count,3);
+            Assert.NotNull(root_Topic);
+
+        }
+
     }
 }
