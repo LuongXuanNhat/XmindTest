@@ -5,52 +5,30 @@
         public RootTopic() { }
         public List<ChildrenTopic> rootChild { get; set; }
 
-        public void CreateDetachedRootTopic()
+        public void CreateDetachedRootTopic(int id, string title)
         {
-            title = "Floating Topic";
-            id = 3;
+            this.title = title;
+            this.id = id;
             href = "";
             notes = new Notes();
             relationShip = new List<RelationShip>();
+            rootChild = new List<ChildrenTopic>();
         }
 
-        public void CreateChildTopic()
+        public void CreateChildTopic(int id, string title)
         {
-            this.rootChild = new List<ChildrenTopic>()
-            {
-                new ChildrenTopic()
-                {
-                    id = 1,
-                    title = "Subtopic 1",
-                    href = href,
-                    notes = new Notes(),
-                    relationShip = new List<RelationShip>()
-                    {
-                        new RelationShip()
-                        {
-                            id = 10,
-                            end1Id = this.id,
-                            end2Id = 1,
-                            controlPoints = new ControlPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 0, y = 0
-                                }
-                            },
-                            lineEndPoints = new LineEndPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 1, y = 1
-                                }
-                            }
-                        }
-                    }
-                    
-                }
-            };
+            if(this.rootChild == null)
+                this.rootChild = new List<ChildrenTopic>();
+
+            var rootChild = new ChildrenTopic();
+            rootChild.CreateChild(id, title);
+
+            this.rootChild.Add(rootChild); 
         }
 
+        public bool FindRootChild(int idExpected)
+        {
+            return this.rootChild.Where(x => x.id == idExpected).FirstOrDefault() == null ? false : true;
+        }
     }
 }

@@ -10,227 +10,62 @@
         public List<RootTopic> rootTopic { get; set; }
         public List<RelationShip> relationShip { get; set; }
 
-        public void CreateAttachedRootTopic()
+        public void CreateNewMap(int id, string title)
         {
-            this.rootTopic.Add(new RootTopic
+            this.id = id;
+            title = title;
+            href = "";
+            rootTopic = new List<RootTopic>();
+            relationShip = new List<RelationShip>();
+
+            rootTopic.Add(this.CreateAttachedRootTopic(1, "Main Topic 1"));
+            rootTopic.Add(this.CreateAttachedRootTopic(2, "Main Topic 2"));
+            rootTopic.Add(this.CreateAttachedRootTopic(3, "Main Topic 3"));
+            rootTopic.Add(this.CreateAttachedRootTopic(4, "Main Topic 4"));
+
+         }
+
+        public RootTopic CreateAttachedRootTopic(int idRoot, string title)
+        {
+            return new RootTopic()
             {
-                title = "Main Topic 5",
-                id = 5,
+                title = title,
+                id = idRoot,
                 href = "",
                 notes = new Notes(),
                 relationShip = new List<RelationShip>()
-                {
-                    new RelationShip()
-                    {
-                        id = 5,
-                        end1Id = 1,
-                        end2Id = 5,
-                        controlPoints = new ControlPoints()
-                        {
-                            position = new Position()
-                            {
-                                x = 0, y = 0
-                            }
-                        },
-                        lineEndPoints = new LineEndPoints()
-                        {
-                            position = new Position()
-                            {
-                                x = 1, y = 0
-                            }
-                        }
-                    }
-                }
-            });
-            
+            };  
         }
 
-        public void CreateNewMap()
+        public RelationShip CreateRelationShip(int idEnd1, int idEnd2)
         {
-            id = 1;
-            title = "Central Topic";
-            rootTopic = new List<RootTopic>()
+            var relationship = new RelationShip()
             {
-                new RootTopic()
-                {
-                    id = 1,
-                    title = "Main Topic 1",
-                    href = "",
-                    notes = new Notes()
-                    {
-                        plain = new Plain()
-                        {
-                            content = ""
-                        },
-                        readHTML = new ReadHTML()
-                        {
-                            content = ""
-                        }
-                    },
-                    rootChild = new List<ChildrenTopic>()
-                    {
-                        ///// 
-                    },
-                    relationShip = new List<RelationShip>()
-                    {
-                        new RelationShip()
-                        {
-                            id =1,
-                            end1Id = this.id,
-                            end2Id = 1,
-                            controlPoints = new ControlPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 0, y = 0
-                                }
-                            },
-                            lineEndPoints = new LineEndPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 1, y = 1
-                                }
-                            }
-                        }
-                    }
-                },
-                new RootTopic()
-                {
-                    id = 2,
-                    title = "Main Topic 2",
-                    href = "",
-                    notes = new Notes()
-                    {
-                        plain = new Plain()
-                        {
-                            content = ""
-                        },
-                        readHTML = new ReadHTML()
-                        {
-                            content = ""
-                        }
-                    },
-                    rootChild = new List<ChildrenTopic>()
-                    {
-                        ///// 
-                    },
-                    relationShip = new List<RelationShip>()
-                    {
-                        new RelationShip()
-                        {
-                            id =2,
-                            end1Id = this.id,
-                            end2Id = 2,
-                            controlPoints = new ControlPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 0, y = 0
-                                }
-                            },
-                            lineEndPoints = new LineEndPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 1, y = 2
-                                }
-                            }
-                        }
-                    }
-                },
-                new RootTopic()
-                {
-                    id = 3,
-                    title = "Main Topic 3",
-                    href = "",
-                    notes = new Notes()
-                    {
-                        plain = new Plain()
-                        {
-                            content = ""
-                        },
-                        readHTML = new ReadHTML()
-                        {
-                            content = ""
-                        }
-                    },
-                    rootChild = new List<ChildrenTopic>()
-                    {
-                        ///// 
-                    },
-                    relationShip = new List<RelationShip>()
-                    {
-                        new RelationShip()
-                        {
-                            id = 3,
-                            end1Id = this.id,
-                            end2Id = 3,
-                            controlPoints = new ControlPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 0, y = 0
-                                }
-                            },
-                            lineEndPoints = new LineEndPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 2, y = 1
-                                }
-                            }
-                        }
-                    }
-                },
-                new RootTopic()
-                {
-                    id = 4, 
-                    title = "Main Topic 4",
-                    href = "",
-                    notes = new Notes()
-                    {
-                        plain = new Plain()
-                        {
-                            content = ""
-                        },
-                        readHTML = new ReadHTML()
-                        {
-                            content = ""
-                        }
-                    },
-                    rootChild = new List<ChildrenTopic>()
-                    {
-                        ///// 
-                    },
-                    relationShip = new List<RelationShip>()
-                    {
-                        new RelationShip()
-                        {
-                            id = 4,
-                            end1Id = this.id,
-                            end2Id = 4,
-                            controlPoints = new ControlPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 0, y = 0
-                                }
-                            },
-                            lineEndPoints = new LineEndPoints()
-                            {
-                                position = new Position()
-                                {
-                                    x = 1, y = 1
-                                }
-                            }
-                        }
-                    }
-                }
-
+                id = 1, // id tự tăng
+                end1Id = idEnd1,
+                end2Id = idEnd2,
+                controlPoints = new ControlPoints(),
+                lineEndPoints = new LineEndPoints()
             };
 
-         }
+            AddPoint(relationship.controlPoints, 2, 3);
+            AddPoint(relationship.lineEndPoints, 2, 3);
+
+            return relationship;
+        }
+
+        public void AddPoint(ControlPoints controlPoints,int v1, int v2)
+        {
+            var position = new Position();
+            controlPoints.position = new Position();
+            controlPoints.position.AddPoint(v1, v2);
+        }
+         public void AddPoint(LineEndPoints lineEndPoints,int v1, int v2)
+        {
+            var position = new Position();
+            lineEndPoints.position = new Position();
+            lineEndPoints.position.AddPoint(v1, v2);
+        }
 
         public void DeleteRootTopic(int v)
         {
@@ -238,9 +73,11 @@
             this.rootTopic.Remove(rootTopic);
         }
 
-        public bool FindRootTopic(int v)
+        public bool FindRootTopic(int idExpected)
         {
-            return this.rootTopic.Where(x => x.id == v).FirstOrDefault() == null ? true : false;
+            return this.rootTopic.Where(x => x.id == idExpected).FirstOrDefault() == null ? false : true;
         }
+
+        
     }
 }
