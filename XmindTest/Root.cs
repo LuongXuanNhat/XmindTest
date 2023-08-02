@@ -231,5 +231,16 @@
             };
 
          }
+
+        public void DeleteRootTopic(int v)
+        {
+            var rootTopic = this.rootTopic.Where(x => x.id == v).First();
+            this.rootTopic.Remove(rootTopic);
+        }
+
+        public bool FindRootTopic(int v)
+        {
+            return this.rootTopic.Where(x => x.id == v).FirstOrDefault() == null ? true : false;
+        }
     }
 }

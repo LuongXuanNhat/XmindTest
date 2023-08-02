@@ -62,10 +62,10 @@ namespace XmindTest
         {
             var root = new Root();
             root.CreateNewMap();
-            root.CreateAttachedRootTopic();
+            root.rootTopic.First().CreateChildTopic();
+            root.DeleteRootTopic(1);
 
-            Assert.NotNull(root.rootTopic.Last());
-            Assert.Equal(root.rootTopic.Last().title, "Main Topic 5");
+            Assert.True(root.FindRootTopic(1));
         }
 
 
