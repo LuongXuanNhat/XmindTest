@@ -62,5 +62,11 @@ namespace XmindTest
             this.SetNotes(new Notes());
             this.SetRelationShip(new List<RelationShip>());
         }
+
+        internal void Add_Notes(string content)
+        {
+            if (notes == null) notes = new Notes();
+            notes.Add_Notes(content);
+        }
     }
 }

@@ -2,11 +2,24 @@
 {
     public class Notes
     {
-        public Notes()
+        private Plain plain;
+
+        public Plain GetPlain()
         {
+            return plain;
         }
 
-        public Plain plain { get; set; }
+        private void SetPlain(Plain value)
+        {
+            plain = value;
+        }
+
         public ReadHTML readHTML { get; set; }
+
+        internal void Add_Notes(string content)
+        {
+            if (plain == null) plain = new Plain();
+            plain.Add_Notes(content);
+        }
     }
 }

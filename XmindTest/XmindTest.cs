@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoFixture.Xunit2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,8 +75,22 @@ namespace XmindTest
             var rootChild = rootTopic.GetSubTopic().Where(x => x.GetTitle().Equals("Subtopic 2")).FirstOrDefault();
             Assert.NotNull(rootChild);
             rootTopic.GetSubTopic().Remove(rootChild);
-
             Assert.Equal(rootTopic.GetSubTopic().Count,1);
+        }
+
+        [Theory, AutoData]
+        public void Add_Notes(string content)
+        {
+            var root = new Root();
+            root.Add_Notes(content);
+
+            Assert.Equal(root.GetNotes().GetPlain().GetContent(), content);
+        }
+
+        [Fact]
+        public void Add_RelationShip()
+        {
+
         }
     }
 }

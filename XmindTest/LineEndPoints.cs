@@ -6,15 +6,28 @@
         {
         }
 
-        public Position position { get; internal set; }
+        private Position position1;
 
-        public LineEndPoints AddPoint(int v1, int v2)
+        public Position GetPosition1()
         {
-            if (this.position == null)
-                this.position = new Position();
+            return position1;
+        }
 
-            this.position.AddPoint(v1, v2);
-            return this;
+        internal void SetPosition1(Position value)
+        {
+            position1 = value;
+        }
+
+        private Position position2;
+
+        public Position GetPosition2()
+        {
+            return position2;
+        }
+
+        internal void SetPosition2(Position value)
+        {
+            position2 = value;
         }
     }
 }
