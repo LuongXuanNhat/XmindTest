@@ -1,2 +1,2 @@
 # XmindTest
-File Test: ObjectTest.cs
+File Test: XmindTest.cs
