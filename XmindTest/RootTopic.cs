@@ -1,34 +1,44 @@
 ﻿namespace XmindTest
 {
-    public class RootTopic : Root
+    public class RootTopic : RootBase
     {
-        public RootTopic() { }
-        public List<ChildrenTopic> rootChild { get; set; }
+        private List<Children> subTopic;
 
-        public void CreateDetachedRootTopic(int id, string title)
+        public List<Children> GetSubTopic()
         {
-            this.title = title;
-            this.id = id;
-            this.href = "";
-            this.notes = new Notes();
-            this.relationShip = new List<RelationShip>();
-            this.rootChild = new List<ChildrenTopic>();
+            return subTopic;
         }
 
-        public void CreateChildTopic(int id, string title)
+        private void SetSubTopic(List<Children> value)
         {
-            if(this.rootChild == null)
-                this.rootChild = new List<ChildrenTopic>();
-
-            var Child = new ChildrenTopic();
-            Child.CreateChild(id, title);
-
-            this.rootChild.Add(Child); 
+            subTopic = value;
         }
 
-        public bool FindRootChild(int idExpected)
+        internal RootTopic Create_RootTopic_Attached(int numberName)
         {
-            return this.rootChild.Where(x => x.id == idExpected).FirstOrDefault() == null ? false : true;
+            this.SetId(Guid.NewGuid().ToString());
+            this.SetTitle("Main Topic " + numberName);
+            this.SetHref("");
+            this.SetNotes(new Notes());
+            this.SetRelationShip(new List<RelationShip>());
+            this.SetSubTopic(new List<Children>());
+            return this;
+        }
+
+        internal RootTopic Create_RootTopic_Detached()
+        {
+            this.SetId(Guid.NewGuid().ToString());
+            this.SetTitle("Floating Topic");
+            this.SetHref("");
+            this.SetNotes(new Notes());
+            this.SetRelationShip(new List<RelationShip>());
+            this.SetSubTopic(new List<Children>());
+            return this;
+        }
+
+        internal void Create_SubTopic()
+        {
+            this.subTopic.Add(new Children().Create_SubTopic(subTopic.Count + 1));
         }
     }
 }
