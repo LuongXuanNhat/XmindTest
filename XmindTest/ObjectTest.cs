@@ -30,7 +30,7 @@ namespace XmindTest
             rootTopic.CreateDetachedRootTopic(10, "Floating Topic");
 
             Assert.NotNull(rootTopic);
-            Assert.Equal(rootTopic.GetType(), new RootTopic().GetType());
+            Assert.Equal(rootTopic.title, "Floating Topic");
         }
         
         [Fact]
@@ -63,6 +63,7 @@ namespace XmindTest
             root.CreateNewMap(1, "Central Topic");
             int idExpected = root.rootTopic.First().id;
             root.rootTopic.First().CreateChildTopic(6, "Subtopic 1");
+
             root.rootTopic.Remove(root.rootTopic.First());
 
             Assert.False(root.FindRootTopic(idExpected));
@@ -70,15 +71,13 @@ namespace XmindTest
 
         // rootTopic -> rootChild -> rootChild
         [Fact]
-        public void Delete_ChildTopic()
+        public void Delete_RootChild()
         {
             // rootTopic
             var rootTopic = new RootTopic();
             rootTopic.CreateDetachedRootTopic(10, "Floating Topic");
-
             // rootTopic -> rootChild
             rootTopic.CreateChildTopic(6, "Subtopic 1");
-
             // rootTopic -> rootChild -> rootChild
             var childTopic = rootTopic.rootChild.First();
             int idExpected = childTopic.id;
@@ -103,6 +102,25 @@ namespace XmindTest
             Assert.NotNull(root_Topic);
 
         }
+        
+        [Fact]
+        public void Pull_RootChild_Out_Of_Branch()
+        {
+            var root = new Root();
+            root.CreateNewMap(1, "Central Topic");
+            var root_Topic = new RootTopic();
+            root_Topic = root.rootTopic.First();
+            root_Topic.CreateChildTopic(10, "Subtopic child 1");
+
+            var root_Child = new RootTopic();
+            root_Child = root_Topic.rootChild.First();
+            root.rootTopic.First().rootChild.Remove(root_Topic.rootChild.First());
+
+            Assert.Equal(root.rootTopic.First().rootChild.Count,0);
+            Assert.NotNull(root_Topic.rootChild);
+        }
+
+
 
     }
 }

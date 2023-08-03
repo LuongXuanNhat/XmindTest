@@ -33,7 +33,8 @@
                 id = idRoot,
                 href = "",
                 notes = new Notes(),
-                relationShip = new List<RelationShip>()
+                relationShip = new List<RelationShip>(),
+                rootChild = new List<ChildrenTopic>()
             };  
         }
 
