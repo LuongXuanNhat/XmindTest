@@ -23,6 +23,17 @@ namespace XmindTest
         private string href;
         private Notes notes;
         private List<RelationShip> relationShip;
+        private float width;
+
+        public float GetWidth()
+        {
+            return width;
+        }
+
+        protected void SetWidth(float value)
+        {
+            width = value;
+        }
 
         public List<RelationShip> GetRelationShip()
         {
@@ -73,6 +84,18 @@ namespace XmindTest
         {
             if (!relationShip.Any()) relationShip = new List<RelationShip>();
             relationShip.Add(new RelationShip().Add_RelationShip(this.id, root.id));
+        }
+
+        internal void Add_RelationShip()
+        {
+            if (!relationShip.Any()) relationShip = new List<RelationShip>();
+            var root_Topic_Detached = new RootTopic().Create_RootTopic_Detached();
+            relationShip.Add(new RelationShip().Add_RelationShip(this.id, root_Topic_Detached.GetId()));
+        }
+
+        internal void Rename(string newName)
+        {
+            this.title = newName;
         }
     }
 }
