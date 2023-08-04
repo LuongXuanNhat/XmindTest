@@ -48,6 +48,7 @@ namespace XmindTest
             Assert.Equal(root.GetRootTopic().Last().GetTitle(), "Main Topic 5");
         }
 
+
         [Theory, AutoData]
         public void Delete_RootTopic_Attached(Root root)
         {
@@ -132,6 +133,13 @@ namespace XmindTest
             Assert.Equal(children.GetTitle(), rootChildName);
         }
 
+        [Theory, AutoData]
+        public void Add_Link(string link, Root root)
+        {
+            root.Add_Link(link);
+
+            Assert.Equal(root.GetHref(), link);
+        }
 
         [Theory, AutoData]
         public void SetWidth(Root root, RootTopic rootTopic, Children children,float Width = 20)
@@ -170,10 +178,10 @@ namespace XmindTest
         }
 
         [Theory, AutoData]
-        public void Convert_RootChild_To_RootTopic_Detached(RootTopic rootTopic, Children children)
+        public void Convert_RootChild_To_RootTopic_Detached(RootTopic rootTopic, Children children, RootTopic rootTopic_Detached)
         {
             rootTopic.Create_RootTopic_Detached().GetSubTopic().Add(children.Create_SubTopic(1));
-            RootTopic rootTopic_Detached = children.Convert_To_RootTopic_Detached(rootTopic);
+            rootTopic_Detached = children.Convert_To_RootTopic_Detached(rootTopic);
 
             Assert.Equal(rootTopic.GetSubTopic().Count(),0);
             Assert.Equal(rootTopic_Detached.GetWidth(), 20);

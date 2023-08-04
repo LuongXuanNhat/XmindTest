@@ -97,5 +97,11 @@ namespace XmindTest
         {
             this.title = newName;
         }
+
+
+        internal void Add_Link(string link)
+        {
+            this.href = link;
+        }
     }
 }
