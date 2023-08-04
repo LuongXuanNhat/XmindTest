@@ -68,5 +68,11 @@ namespace XmindTest
             if (notes == null) notes = new Notes();
             notes.Add_Notes(content);
         }
+
+        internal void Add_RelationShip(RootBase root)
+        {
+            if (!relationShip.Any()) relationShip = new List<RelationShip>();
+            relationShip.Add(new RelationShip().Add_RelationShip(this.id, root.id));
+        }
     }
 }

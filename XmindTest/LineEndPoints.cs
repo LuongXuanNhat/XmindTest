@@ -4,6 +4,8 @@
     {
         public LineEndPoints()
         {
+            position1 = new Position();
+            position2 = new Position();
         }
 
         private Position position1;
@@ -28,6 +30,16 @@
         internal void SetPosition2(Position value)
         {
             position2 = value;
+        }
+
+        internal LineEndPoints Save_Location()
+        {
+            // Point mousePosition = Control.MousePosition;
+            int x = new Random().Next(10);
+            int y = new Random().Next(10);
+            position1.AddPoint(x, y);
+            position2.AddPoint(x, y);
+            return this;
         }
     }
 }

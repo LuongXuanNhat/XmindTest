@@ -4,6 +4,8 @@
     {
         public RelationShip()
         {
+            lineEndPoints = new LineEndPoints();
+            controlPoints = new ControlPoints();
         }
 
         private ControlPoints controlPoints;
@@ -18,14 +20,25 @@
             controlPoints = value;
         }
 
-        private int id;
+        private string id;
+        private string title;
 
-        public int GetId()
+        public string GetTitle()
+        {
+            return title;
+        }
+
+        private void SetTitle(string value)
+        {
+            title = value;
+        }
+
+        public string GetId()
         {
             return id;
         }
 
-        private void SetId(int value)
+        private void SetId(string value)
         {
             id = value;
         }
@@ -42,32 +55,41 @@
             lineEndPoints = value;
         }
 
-        private int end1Id;
+        private string end1Id;
 
-        public int GetEnd1Id()
+        public string GetEnd1Id()
         {
             return end1Id;
         }
 
-        private void SetEnd1Id(int value)
+        private void SetEnd1Id(string value)
         {
             end1Id = value;
         }
 
-        private int end2Id;
+        private string end2Id;
 
-        public int GetEnd2Id()
+        public string GetEnd2Id()
         {
             return end2Id;
         }
 
-        private void SetEnd2Id(int value)
+        private void SetEnd2Id(string value)
         {
             end2Id = value;
         }
 
-
-
-
+        internal RelationShip Add_RelationShip(string idStart, string idEnd)
+        {
+            return new RelationShip()
+            {
+                id = Guid.NewGuid().ToString(),
+                title = "Relationship",
+                end1Id = idStart,
+                end2Id = idEnd,
+                controlPoints = new ControlPoints().Save_Location(),
+                lineEndPoints = new LineEndPoints().Save_Location()
+            };
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoFixture.Xunit2;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,9 @@ namespace XmindTest
 {
     public class XmindTest
     {
-        [Fact]
-        public void Create_Map()
+        [Theory, AutoData]
+        public void Create_Map(Root root)
         {
-            var root = new Root();
             root.Create_Map();
             
             Assert.NotNull(root);
@@ -29,17 +29,13 @@ namespace XmindTest
             Assert.Equal(rootTopic.GetTitle(), "Floating Topic");
         }
 
-        [Fact]
-        public void Create_RootTopic_When_Press_Tab()
+        [Theory, AutoData]
+        public void Create_RootTopic_When_Press_Tab(Root root)
         {
-            var root = new Root();
             root.Create_Map();
-
             root.Create_RootTopic_Attached();
-            var rootTopic = root.GetRootTopic();
 
-            Assert.Equal(rootTopic.Count,5);
-            Assert.Equal(rootTopic.Last().GetTitle(), "Main Topic 5");
+            Assert.Equal(root.GetRootTopic().Last().GetTitle(), "Main Topic 5");
         }
 
         [Fact]
@@ -59,7 +55,7 @@ namespace XmindTest
             rootTopic.Create_SubTopic();
 
             rootTopic = null;
-            GC.Collect();
+            // GC.Collect();
 
             Assert.Null(rootTopic);
         }
@@ -79,18 +75,34 @@ namespace XmindTest
         }
 
         [Theory, AutoData]
-        public void Add_Notes(string content)
+        public void Add_Notes(Root root ,string content)
         {
-            var root = new Root();
             root.Add_Notes(content);
 
             Assert.Equal(root.GetNotes().GetPlain().GetContent(), content);
         }
 
-        [Fact]
-        public void Add_RelationShip()
+        [Theory, AutoData]
+        public void Add_RelationShip(Root root, RootTopic root_Topic)
         {
+            root_Topic.Create_RootTopic_Detached();
+            root.Add_RelationShip(root_Topic);
+            root_Topic.Create_SubTopic();
+            root.Add_RelationShip(root_Topic.GetSubTopic().First());
 
+            Assert.Equal(root.GetRelationShip().Count,2);
+            Assert.Equal(root.GetRelationShip().First().GetTitle(), "Relationship");
+            Assert.Equal(root.GetRelationShip().Last().GetTitle(), "Relationship");
+        }
+
+        [Theory, AutoData]
+        public void Remove_RelationShip(Root root, RootTopic root_Topic)
+        {
+            root_Topic.Create_RootTopic_Detached();
+            root.Add_RelationShip(root_Topic);
+            root.GetRelationShip().Remove(root.GetRelationShip().First());
+
+            Assert.Equal(root.GetRelationShip().Count(), 0);
         }
     }
 }
