@@ -76,7 +76,6 @@ namespace XmindTest_Project
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
             var relationship = root.AddRelationship(detachedTopic);
 
-            Assert.NotNull(relationship);
             Assert.Single(root.GetRelationship());
         }
 
@@ -86,12 +85,48 @@ namespace XmindTest_Project
             var root = CreateDefaultRoot();
             var firstTopic = root.GetChildren().First();
             var subTopic = firstTopic.CreateTopic("Subtopic", 15);
-            var relationship = root.GetRelationship();
 
             firstTopic.AddTopic(subTopic);
             root.AddRelationship(firstTopic);
 
-            Assert.Single(relationship);
+            Assert.Single(root.GetRelationship());
+        }
+
+        [Fact]
+        public void Add_Relationship_From_Attached_Topic_To_Subtopic()
+        {
+            var root = CreateDefaultRoot();
+            var firstTopic = root.GetChildren().First();
+            var subTopic = firstTopic.CreateTopic("Subtopic", 15);
+
+            firstTopic.AddTopic(subTopic);
+            firstTopic.AddRelationship(firstTopic);
+
+            Assert.Single(firstTopic.GetRelationship());
+        }
+
+        [Fact]
+        public void Add_Relationship_From_Detached_Topic_To_Attached_Topic()
+        {
+            var root = CreateDefaultRoot();
+            var detachedTopic = root.CreateDetachedTopic("Floating topic");
+            var firstTopic = root.GetChildren().First();
+
+            detachedTopic.AddRelationship(firstTopic);
+
+            Assert.Single(detachedTopic.GetRelationship());
+        }
+
+        [Fact]
+        public void Add_Relationship_From_Detached_Topic_To_Detached_Topic()
+        {
+            var root = CreateDefaultRoot();
+            var detachedTopic = root.CreateDetachedTopic("Floating topic");
+            var detachedTopic2 = root.CreateDetachedTopic("Floating topic");
+
+            detachedTopic.AddRelationship(detachedTopic2);
+
+            Assert.Single(detachedTopic.GetRelationship());
         }
 
         [Fact]
