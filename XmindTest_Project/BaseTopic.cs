@@ -96,9 +96,9 @@ namespace XmindTest_Project
         {
             _detachedChildren = _detachedChildren.Where(e => !e._id.Equals(id)).ToList();
         }
-        internal Relationship AddRelationship(BaseTopic baseTopic)
+        internal Relationship AddRelationship(BaseTopic baseTopic, string title)
         {
-            var relationship = new Relationship(this._id, baseTopic._id);
+            var relationship = new Relationship(this._id, baseTopic._id, title);
             _relationship.Add(relationship);
             return relationship;
         }

@@ -85,6 +85,11 @@ namespace XmindTest_Project
             {
                 _root.DeleteAll();
             }
+
+            public string GetDefaultTitleRelationship()
+            {
+                return "Relationship";
+            }
         }
     }
 }

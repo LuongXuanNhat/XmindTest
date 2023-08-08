@@ -61,9 +61,10 @@ namespace XmindTest_Project
         [Fact]
         public void Add_Relationship_From_Root_To_Attached_Topic()
         {
+            var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var firstTopic = root.GetChildren().First();
-            var relationship = root.AddRelationship(firstTopic);
+            var relationship = root.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
 
             Assert.NotNull(relationship);
             Assert.Single(root.GetRelationship());
@@ -72,9 +73,10 @@ namespace XmindTest_Project
         [Fact]
         public void Add_Relationship_From_Root_To_Detached_Topic()
         {
+            var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
-            var relationship = root.AddRelationship(detachedTopic);
+            var relationship = root.AddRelationship(detachedTopic, xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(root.GetRelationship());
         }
@@ -82,12 +84,13 @@ namespace XmindTest_Project
         [Fact]
         public void Add_Relationship_From_Root_To_Subtopic()
         {
+            var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var firstTopic = root.GetChildren().First();
             var subTopic = firstTopic.CreateTopic("Subtopic", 15);
 
             firstTopic.AddTopic(subTopic);
-            root.AddRelationship(firstTopic);
+            root.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(root.GetRelationship());
         }
@@ -95,12 +98,13 @@ namespace XmindTest_Project
         [Fact]
         public void Add_Relationship_From_Attached_Topic_To_Subtopic()
         {
+            var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var firstTopic = root.GetChildren().First();
             var subTopic = firstTopic.CreateTopic("Subtopic", 15);
 
             firstTopic.AddTopic(subTopic);
-            firstTopic.AddRelationship(firstTopic);
+            firstTopic.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(firstTopic.GetRelationship());
         }
@@ -108,11 +112,12 @@ namespace XmindTest_Project
         [Fact]
         public void Add_Relationship_From_Detached_Topic_To_Attached_Topic()
         {
+            var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
             var firstTopic = root.GetChildren().First();
 
-            detachedTopic.AddRelationship(firstTopic);
+            detachedTopic.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(detachedTopic.GetRelationship());
         }
@@ -120,11 +125,12 @@ namespace XmindTest_Project
         [Fact]
         public void Add_Relationship_From_Detached_Topic_To_Detached_Topic()
         {
+            var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
             var detachedTopic2 = root.CreateDetachedTopic("Floating topic");
 
-            detachedTopic.AddRelationship(detachedTopic2);
+            detachedTopic.AddRelationship(detachedTopic2, xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(detachedTopic.GetRelationship());
         }
@@ -351,8 +357,10 @@ namespace XmindTest_Project
             Assert.Empty(firstTopic.GetChildren());
             Assert.Equal(3, root.GetChildren().Count);
         }
-        
-        
+
+
+
+
 
 
     }
