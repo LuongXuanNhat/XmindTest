@@ -33,7 +33,6 @@ namespace XmindTest_Project
             Assert.Single(root.GetDetachedChildren());
         }
 
-
         [Fact]
         public void Create_Attached_Topic()
         {
@@ -60,15 +59,39 @@ namespace XmindTest_Project
         }
 
         [Fact]
-        public void Add_Relationship()
+        public void Add_Relationship_From_Root_To_Attached_Topic()
         {
             var root = CreateDefaultRoot();
-
-            BaseTopic firstTopic = root.GetChildren().First();
+            var firstTopic = root.GetChildren().First();
             var relationship = root.AddRelationship(firstTopic);
 
             Assert.NotNull(relationship);
             Assert.Single(root.GetRelationship());
+        }
+
+        [Fact]
+        public void Add_Relationship_From_Root_To_Detached_Topic()
+        {
+            var root = CreateDefaultRoot();
+            var detachedTopic = root.CreateDetachedTopic("Floating topic");
+            var relationship = root.AddRelationship(detachedTopic);
+
+            Assert.NotNull(relationship);
+            Assert.Single(root.GetRelationship());
+        }
+
+        [Fact]
+        public void Add_Relationship_From_Root_To_Subtopic()
+        {
+            var root = CreateDefaultRoot();
+            var firstTopic = root.GetChildren().First();
+            var subTopic = firstTopic.CreateTopic("Subtopic", 15);
+            var relationship = root.GetRelationship();
+
+            firstTopic.AddTopic(subTopic);
+            root.AddRelationship(firstTopic);
+
+            Assert.Single(relationship);
         }
 
         [Fact]
@@ -213,25 +236,6 @@ namespace XmindTest_Project
             Assert.Equal(2,lastTopic.GetChildren().Count);
         }
 
-        //[Fact] 
-        //public void Convert_Multiple_Different_Topic_To_Detached_Topic()
-        //{
-        //    var xmindService = new XmindService();
-        //    var parent = CreateDefaultRoot();
-        //    var detachedTopic = parent.GetDetachedChildren();
-        //    var firstTopic = parent.GetChildren().First();
-        //    var lastTopic = parent.GetChildren().Last();
-        //    var subTopic = firstTopic.CreateTopic("Subtopic");
-        //    var double = xmindService.CreateListPair();
-
-        //    double.AddPair(subTopic, firstTopic);
-        //    double.AddPair(lastTopic, parent);
-        //    parent.MoveMultipleDifferentDetachedTopicToChildrenTopic(double, parent);
-
-        //    Assert.Empty(parent.GetDetachedChildren());
-        //    Assert.Equal(3,lastTopic.GetChildren().Count);
-        //}
-
         [Fact]
         public void Delete_All()
         {
@@ -264,29 +268,6 @@ namespace XmindTest_Project
         }
 
         [Fact]
-        public void Delete_Detached_Topic_From_Id() { 
-            var root = CreateDefaultRoot();
-            var detachedTopic = root.CreateDetachedTopic("Floating topic");
-
-            root.DeleteDetachedChildrenFromId(detachedTopic.GetId());
-        }
-
-        [Fact]
-        public void Delete_Children_From_Id() { 
-            var root = CreateDefaultRoot();
-            var firstTopic = root.GetChildren().First();
-            var secondTopic = root.GetChildren().Last();
-            var childTopic = firstTopic.CreateTopic("Subtopic");
-
-            firstTopic.AddTopic(childTopic);
-            root.DeleteChildrenFromId(secondTopic.GetId());
-            firstTopic.DeleteChildrenFromId(childTopic.GetId());
-
-            Assert.Empty(firstTopic.GetChildren());
-            Assert.Equal(3, root.GetChildren().Count);
-        }
-        
-        [Fact]
         public void Delete_Subtopic()
         {
             var root = CreateDefaultRoot();
@@ -314,10 +295,30 @@ namespace XmindTest_Project
         }
 
         [Fact]
-        public void Delete()
-        {
+        public void Delete_Detached_Topic_From_Id() { 
+            var root = CreateDefaultRoot();
+            var detachedTopic = root.CreateDetachedTopic("Floating topic");
 
+            root.DeleteDetachedChildrenFromId(detachedTopic.GetId());
         }
+
+        [Fact]
+        public void Delete_Children_From_Id() { 
+            var root = CreateDefaultRoot();
+            var firstTopic = root.GetChildren().First();
+            var secondTopic = root.GetChildren().Last();
+            var childTopic = firstTopic.CreateTopic("Subtopic");
+
+            firstTopic.AddTopic(childTopic);
+            root.DeleteChildrenFromId(secondTopic.GetId());
+            firstTopic.DeleteChildrenFromId(childTopic.GetId());
+
+            Assert.Empty(firstTopic.GetChildren());
+            Assert.Equal(3, root.GetChildren().Count);
+        }
+        
+        
+
 
     }
 }

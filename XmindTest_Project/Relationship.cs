@@ -1,6 +1,6 @@
 ﻿namespace XmindTest_Project
 {
-    internal class Relationship
+    public class Relationship
     {
         private Guid _id;
         private Guid _idEnd1;

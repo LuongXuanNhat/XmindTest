@@ -1,6 +1,6 @@
 ﻿namespace XmindTest_Project
 {
-    internal class LineEndPoint
+    public class LineEndPoint
     {
         public LineEndPoint()
         {

@@ -11,7 +11,7 @@ namespace XmindTest_Project
         private Notes _notes;
         private string _href;
 
-        private List<BaseTopic> _children { get; set; }
+        public List<BaseTopic> _children { get; set; }
         private List<BaseTopic> _detachedChildren { get; set; }
 
         public BaseTopic(string title, int? width)

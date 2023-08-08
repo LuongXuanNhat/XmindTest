@@ -1,6 +1,6 @@
 ﻿namespace XmindTest_Project
 {
-    internal class ControlPoint
+    public class ControlPoint
     {
         public ControlPoint()
         {

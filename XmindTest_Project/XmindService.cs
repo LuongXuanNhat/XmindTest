@@ -13,7 +13,7 @@ namespace XmindTest_Project
                 _root = root ?? CreateDefault(); //call open file and convert file to RootNode here
             }
 
-            internal RootNode CreateDefault()
+            public RootNode CreateDefault()
             {
                 string defaultTitle = GetDefaultAttachedTitle();
                 int width = GetDefaultWidthAttachedTopic();
@@ -28,7 +28,7 @@ namespace XmindTest_Project
             {
                 return 25;
             }
-            internal int GetDefaultWidthDetachedTopic()
+            public int GetDefaultWidthDetachedTopic()
             {
                 return 20;
             }
@@ -46,42 +46,42 @@ namespace XmindTest_Project
             {
                 return "Main Topic ";
             }
-            internal string GetDefaultSubTopicTitle()
+            public string GetDefaultSubTopicTitle()
             {
                 return "Subtopic ";
             }
 
-            internal int GetWidthSubTopic()
+            public int GetWidthSubTopic()
             {
                 return 15;
             }
 
-            internal string GetNotes()
+            public string GetNotes()
             {
                 return "Notes";
             }
 
-            internal string GetLink()
+            public string GetLink()
             {
                 return "example.com";
             }
 
-            internal int GetDefaultWidthSubtopic()
+            public int GetDefaultWidthSubtopic()
             {
                 return 15;
             }
 
-            internal void CreateDetachedTopic(string title = "", int? width = null)
+            public void CreateDetachedTopic(string title = "", int? width = null)
             {
                 _root.CreateDetachedTopic(title ?? this.GetDefaultDetachedTitle(), width ?? this.GetDefaultWidthDetachedTopic());
             }
 
-            internal RootNode GetRootNode()
+            public RootNode GetRootNode()
             {
                 return this._root;
             }
 
-            internal void DeleteAll()
+            public void DeleteAll()
             {
                 _root.DeleteAll();
             }

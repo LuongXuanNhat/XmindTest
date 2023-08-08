@@ -1,6 +1,6 @@
 ﻿namespace XmindTest_Project
 {
-    internal class Notes
+    public class Notes
     {
         private Guid _id;
         private string _content;
