@@ -37,8 +37,8 @@ namespace XmindTest_Project
         public void Create_Attached_Topic()
         {
             // create default topics
-            var xmindService = new XmindService(); 
-            var root = xmindService.GetRootNode(); 
+            var xmindService = new XmindService();
+            var root = xmindService.GetRootNode();
             root.AddTopic("main topic 1");
 
             Assert.NotNull(root);
@@ -55,7 +55,7 @@ namespace XmindTest_Project
 
             Assert.Single(firstTopic.GetChildren());
 
-            
+
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace XmindTest_Project
             var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var firstTopic = root.GetChildren().First();
-            var relationship = root.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
+            var relationship = root.AddRelationship(firstTopic.GetId(), xmindService.GetDefaultTitleRelationship());
 
             Assert.NotNull(relationship);
             Assert.Single(root.GetRelationship());
@@ -76,7 +76,7 @@ namespace XmindTest_Project
             var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
-            var relationship = root.AddRelationship(detachedTopic, xmindService.GetDefaultTitleRelationship());
+            var relationship = root.AddRelationship(detachedTopic.GetId(), xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(root.GetRelationship());
         }
@@ -90,7 +90,7 @@ namespace XmindTest_Project
             var subTopic = firstTopic.CreateTopic("Subtopic", 15);
 
             firstTopic.AddTopic(subTopic);
-            root.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
+            root.AddRelationship(firstTopic.GetId(), xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(root.GetRelationship());
         }
@@ -104,7 +104,7 @@ namespace XmindTest_Project
             var subTopic = firstTopic.CreateTopic("Subtopic", 15);
 
             firstTopic.AddTopic(subTopic);
-            firstTopic.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
+            firstTopic.AddRelationship(firstTopic.GetId(), xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(firstTopic.GetRelationship());
         }
@@ -117,7 +117,7 @@ namespace XmindTest_Project
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
             var firstTopic = root.GetChildren().First();
 
-            detachedTopic.AddRelationship(firstTopic, xmindService.GetDefaultTitleRelationship());
+            detachedTopic.AddRelationship(firstTopic.GetId(), xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(detachedTopic.GetRelationship());
         }
@@ -130,7 +130,7 @@ namespace XmindTest_Project
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
             var detachedTopic2 = root.CreateDetachedTopic("Floating topic");
 
-            detachedTopic.AddRelationship(detachedTopic2, xmindService.GetDefaultTitleRelationship());
+            detachedTopic.AddRelationship(detachedTopic2.GetId(), xmindService.GetDefaultTitleRelationship());
 
             Assert.Single(detachedTopic.GetRelationship());
         }
@@ -149,7 +149,7 @@ namespace XmindTest_Project
         public void Convert_Attached_Topic_To_Detached_Topic()
         {
             var root = CreateDefaultRoot();
-            var firstTopic = root.GetChildren().First();    
+            var firstTopic = root.GetChildren().First();
 
             root.MoveChildrenTopicToDetachTopic(firstTopic, root);
 
@@ -166,7 +166,7 @@ namespace XmindTest_Project
             root.MoveMultipleChildrenTopicToDetachTopic(topics, root);
 
             Assert.Empty(root.GetChildren());
-            Assert.Equal(4,root.GetDetachedChildren().Count);
+            Assert.Equal(4, root.GetDetachedChildren().Count);
         }
 
         [Fact]
@@ -194,7 +194,7 @@ namespace XmindTest_Project
             parent.MoveMultipleChildrenTopicToDetachTopic(children, root);
 
             Assert.Empty(parent.GetChildren());
-            Assert.Equal(2,root.GetDetachedChildren().Count);
+            Assert.Equal(2, root.GetDetachedChildren().Count);
         }
 
         [Fact]
@@ -203,7 +203,7 @@ namespace XmindTest_Project
             var root = CreateDefaultRoot();
             var detachedTopic = root.CreateDetachedTopic("floating topic");
 
-            root.MoveDetachedToAttachTopic( detachedTopic, root);
+            root.MoveDetachedToAttachTopic(detachedTopic, root);
 
             Assert.Equal(5, root.GetChildren().Count);
             Assert.Empty(root.GetDetachedChildren());
@@ -217,7 +217,7 @@ namespace XmindTest_Project
 
             root.CreateDetachedTopic("floating topic");
             root.CreateDetachedTopic("floating topic");
-            root.MoveMultipleDetachedToAttachTopic( topics, root);
+            root.MoveMultipleDetachedToAttachTopic(topics, root);
 
             Assert.Empty(root.GetDetachedChildren());
             Assert.Equal(6, root.GetChildren().Count);
@@ -246,10 +246,10 @@ namespace XmindTest_Project
             root.MoveMultipleAttachedToChildrenTopic(children, detachedTopic);
 
             Assert.Empty(root.GetChildren());
-            Assert.Equal(4,detachedTopic.GetChildren().Count);
+            Assert.Equal(4, detachedTopic.GetChildren().Count);
         }
 
-        [Fact] 
+        [Fact]
         public void Convert_Detached_Topic_To_Subtopic()
         {
             var parent = CreateDefaultRoot();
@@ -262,7 +262,7 @@ namespace XmindTest_Project
             Assert.Single(lastTopic.GetChildren());
         }
 
-        [Fact] 
+        [Fact]
         public void Convert_Multiple_Detached_Topic_To_Subtopic()
         {
             var parent = CreateDefaultRoot();
@@ -274,7 +274,7 @@ namespace XmindTest_Project
             parent.MoveMultipleDetachedTopicToChildrenTopic(detachedTopic, lastTopic);
 
             Assert.Empty(parent.GetDetachedChildren());
-            Assert.Equal(2,lastTopic.GetChildren().Count);
+            Assert.Equal(2, lastTopic.GetChildren().Count);
         }
 
         [Fact]
@@ -296,7 +296,7 @@ namespace XmindTest_Project
 
             root.DeleteDetachedChildren(detachedTopic);
         }
-        
+
         [Fact]
         public void Delete_Attached_Topic()
         {
@@ -305,7 +305,7 @@ namespace XmindTest_Project
 
             root.DeleteChildren(attachedTopic);
 
-            Assert.Equal(3,root.GetChildren().Count);
+            Assert.Equal(3, root.GetChildren().Count);
         }
 
         [Fact]
@@ -315,7 +315,7 @@ namespace XmindTest_Project
             var attachedTopic = root.GetChildren().First();
             var subtopic = attachedTopic.CreateTopic("Subtopic");
 
-            root.DeleteChildren(subtopic);
+            attachedTopic.DeleteChildren(subtopic);
 
             Assert.Empty(attachedTopic.GetChildren());
         }
@@ -336,7 +336,8 @@ namespace XmindTest_Project
         }
 
         [Fact]
-        public void Delete_Detached_Topic_From_Id() { 
+        public void Delete_Detached_Topic_From_Id()
+        {
             var root = CreateDefaultRoot();
             var detachedTopic = root.CreateDetachedTopic("Floating topic");
 
@@ -344,7 +345,8 @@ namespace XmindTest_Project
         }
 
         [Fact]
-        public void Delete_Children_From_Id() { 
+        public void Delete_Children_From_Id()
+        {
             var root = CreateDefaultRoot();
             var firstTopic = root.GetChildren().First();
             var secondTopic = root.GetChildren().Last();
@@ -358,10 +360,260 @@ namespace XmindTest_Project
             Assert.Equal(3, root.GetChildren().Count);
         }
 
+        [Fact]
+        public void Delete_Multiple_Topics_By_Id()
+        {
+            var root = CreateDefaultRoot();
+            var idSet = new List<Guid>();
+            var sub1 = root.CreateTopic("1");
+            idSet.Add(sub1.GetId());
+            var sub2 = root.CreateTopic("2");
+            idSet.Add(sub2.GetId());
+            var sub3 = root.CreateTopic("3");
+            idSet.Add(sub3.GetId());
+
+            Assert.Equal(7, root.GetChildren().Count);
+
+            root.DeleteChildrenTopics(idSet);
+
+            Assert.Equal(4, root.GetChildren().Count);
+
+        }
+
+        [Fact]
+        public void Delete_Multiple_Floating_Topics_By_Id()
+        {
+            var root = CreateDefaultRoot();
+
+            var idSet = new List<Guid>();
+            var sub1 = root.CreateDetachedTopic("1");
+            idSet.Add(sub1.GetId());
+            var sub2 = root.CreateDetachedTopic("2");
+            idSet.Add(sub2.GetId());
+            var sub3 = root.CreateDetachedTopic("3");
+            idSet.Add(sub3.GetId());
+
+            Assert.Equal(3, root.GetDetachedChildren().Count);
+
+            root.DeleteDetachedTopics(idSet);
+
+            Assert.Empty(root.GetDetachedChildren());
+        }
 
 
+        [Fact]
+        public void Delete_Multiple_Different_Topics_By_Id()
+        {
+            var root = CreateDefaultRoot();
+
+            var idSet = new List<Guid>();
+            var sub1 = root.CreateDetachedTopic("1");
+            idSet.Add(sub1.GetId());
+            var sub2 = root.CreateDetachedTopic("2");
+            idSet.Add(sub2.GetId());
+            var sub3 = root.CreateDetachedTopic("3");
+            var sub4 = root.CreateTopic("4");
+
+            idSet.Add(sub3.GetId());
+            idSet.Add(sub4.GetId());
+
+            Assert.Equal(3, root.GetDetachedChildren().Count);
+            Assert.Equal(5, root.GetChildren().Count);
+
+            root.DeleteTopics(idSet);
+
+            Assert.Empty(root.GetDetachedChildren());
+            Assert.Equal(4, root.GetChildren().Count);
+        }
+
+        [Fact]
+        public void Delete_Multiple_Grand_Child_By_Id()
+        {
+            var root = CreateDefaultRoot();
+
+            var idSet = new List<Guid>();
+            var sub1 = root.CreateDetachedTopic("1");
+
+            var sub11 = sub1.CreateTopic("11");
+            //delete topic 11
+            idSet.Add(sub11.GetId());
+
+            var sub2 = root.CreateDetachedTopic("2");
+            //delete detached topic 2
+            idSet.Add(sub2.GetId());
+            var sub3 = root.CreateTopic("3");
+
+            //delete topic 3
+            idSet.Add(sub3.GetId());
+
+            var sub4 = root.CreateTopic("4");
+
+            var sub41 = sub4.CreateTopic("41");
+            //delete topic 41
+            idSet.Add(sub41.GetId());
 
 
+            Assert.Single(sub1.GetChildren());
+            Assert.Single(sub4.GetChildren());
+            Assert.Equal(6, root.GetChildren().Count);
+            Assert.Equal(2, root.GetDetachedChildren().Count);
+
+            root.DeleteTopics(idSet);
+
+            Assert.Empty(sub1.GetChildren());
+            Assert.Empty(sub4.GetChildren());
+            Assert.Equal(5, root.GetChildren().Count);
+        }
+
+        [Fact]
+        public void Delete_Multiple_Grand_Children_By_Id()
+        {
+            var root = CreateDefaultRoot();
+
+            var idSet = new List<Guid>();
+            var sub1 = root.CreateDetachedTopic("1");
+
+            var sub11 = sub1.CreateTopic("11");
+            sub1.AddTopic(sub11);
+            idSet.Add(sub11.GetId());
+
+            root.DeleteTopics(idSet);
+            //Assert.Empty(sub1.GetChildren());
+            Assert.Equal(4, root.GetChildren().Count);
+            Assert.Empty(sub11.GetChildren());
+        }
+
+        // Target children of attached topic
+        [Fact]
+        public void Move_Multiple_Grandchildren_1()
+        {
+            var root = CreateDefaultRoot();
+
+            var objectSet = new List<BaseTopic>();
+            var idtSet = new List<Guid>();
+
+            // move topic 11
+            var sub1 = root.CreateDetachedTopic("Topic 1");
+            var sub11 = sub1.CreateTopic("11");
+            objectSet.Add(sub11);
+            idtSet.Add(sub11.GetId());
+
+            // move detached topic 2
+            var sub2 = root.CreateDetachedTopic("Topic 2");
+            objectSet.Add(sub2);
+            idtSet.Add(sub2.GetId());
+
+            // move topic 3
+            var sub3 = root.CreateTopic("Topic 3");
+            objectSet.Add(sub3);
+            idtSet.Add(sub3.GetId());
+
+            // move topic 41
+            var sub4 = root.CreateTopic("Topic 4");
+            var sub41 = sub4.CreateTopic("41");
+            objectSet.Add(sub41);
+            idtSet.Add(sub41.GetId());
+
+            //target attached topic 5
+            var sub5 = root.CreateTopic("Topic 5");
+
+            Assert.Equal(7, root.GetChildren().Count);
+            Assert.Equal(1, sub1.GetChildren().Count);
+            Assert.Equal(1, sub4.GetChildren().Count);
+
+            sub5.MoveTopics(objectSet,idtSet, root);
+
+            //Assert.Empty(sub1.GetChildren());
+            Assert.Equal(6, root.GetChildren().Count);
+            Assert.Empty(sub11.GetChildren());
+            Assert.Empty(sub11.GetChildren());
+            Assert.Equal(4,sub5.GetChildren().Count);
+        }
+
+        // Target grandchildren of detached topic
+        [Fact]
+        public void Move_Multiple_Grandchildren_2()
+        {
+            var root = CreateDefaultRoot();
+
+            var objectSet = new List<BaseTopic>();
+            var idtSet = new List<Guid>();
+
+            // move topic 11
+            var sub1 = root.CreateDetachedTopic("Topic 1");
+            var sub11 = sub1.CreateTopic("11");
+            objectSet.Add(sub11);
+            idtSet.Add(sub11.GetId());
+
+            // move detached topic 2
+            var sub2 = root.CreateDetachedTopic("Topic 2");
+            objectSet.Add(sub2);
+            idtSet.Add(sub2.GetId());
+
+            // move topic 3
+            var sub3 = root.CreateTopic("Topic 3");
+            objectSet.Add(sub3);
+            idtSet.Add(sub3.GetId());
+
+            // move topic 41
+            var sub4 = root.CreateTopic("Topic 4");
+            var sub41 = sub4.CreateTopic("41");
+            objectSet.Add(sub41);
+            idtSet.Add(sub41.GetId());
+
+            //target detached topic 5
+            var sub5 = root.CreateDetachedTopic("Topic 5");
+            var childOfSub5 = sub5.CreateTopic("Subtopic 5.1");
+
+            Assert.Equal(6, root.GetChildren().Count);
+            Assert.Equal(1, sub1.GetChildren().Count);
+            Assert.Equal(1, sub4.GetChildren().Count);
+
+            childOfSub5.MoveTopics(objectSet,idtSet, root);
+
+            //Assert.Empty(sub1.GetChildren());
+            Assert.Equal(5, root.GetChildren().Count);
+            Assert.Empty(sub11.GetChildren());
+            Assert.Empty(sub11.GetChildren());
+            Assert.Equal(4, childOfSub5.GetChildren().Count);
+        }
+
+        [Fact]
+        public void Set_Width_For_Topic()
+        {
+            var xmindService = new XmindService();
+            var root = CreateDefaultRoot();
+            var firstChild = root.GetChildren().First();
+
+            firstChild.SetWidth(xmindService.GetDefaultWidth());
+
+            Assert.Equal(30, firstChild.GetWidth());
+        }
+
+        [Fact]
+        public void Set_Default_Height_Topic()
+        {
+            var xmindService = new XmindService();
+            var root = CreateDefaultRoot();
+            var firstChild = root.GetChildren().First();
+
+            firstChild.SetHeight(xmindService.GetDefaultHeight());
+
+            Assert.Equal(10 , firstChild.GetHeight());
+        }
+
+        [Fact]
+        public void Set_Position_Topic()
+        {
+            var xmindService = new XmindService();
+            var root = CreateDefaultRoot();
+
+            xmindService.SetPositionTopic(root);
+
+            Assert.Equal(100, root.GetPosition().GetX());
+            Assert.Equal(100, root.GetPosition().GetY());
+
+        }
 
     }
 }

@@ -1,18 +1,27 @@
 ﻿namespace XmindTest_Project
 {
-    internal class Position
+    public class Position
     {
-        private int _x;
-        private int _y;
+        private double _x;
+        private double _y;
 
         public Position()
         {
         }
-
-        internal void AddPoint(int x, int y)
+        public Position(double x, double y)
         {
             _x = x;
-            _y = y;
+            _y = y; 
+        }
+
+        internal double GetX()
+        {
+            return _x;
+        }
+
+        internal double GetY()
+        {
+            return _y;
         }
     }
 }

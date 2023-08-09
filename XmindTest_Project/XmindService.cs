@@ -90,6 +90,65 @@ namespace XmindTest_Project
             {
                 return "Relationship";
             }
+
+            internal double GetDefaultHeight()
+            {
+                return 10;
+            }
+
+            internal double GetDefaultWidth()
+            {
+                return 30;
+            }
+
+            internal void SetPositionTopic(RootNode root)
+            {
+                var width = GetDefaultWidth();  // 30
+                var height = GetDefaultHeight();  // 10
+                var spaceX = GetDefaultSpace();  // 15
+                var spaceY = GetDefaultSpace();  // 15
+                var position = new Position(0,0);
+                var topics = root.GetChildren();
+
+                root.SetWidth(width); root.SetHeight(height);
+                root.SetPosition(100,100);
+                for (int i = 0; i < topics.Count; i++)
+                {
+                    double x = 100 + width + spaceX;
+                    double y = 100 + height + spaceY;
+                    position = new Position(x, y);
+                    topics[i].SetPosition(position);
+                    topics[i].SetWidth(GetDefaultWidth());
+                    topics[i].SetHeight(GetDefaultHeight());
+
+                    if (width > 0 && height > 0)
+                    {
+                        height = -height;
+                        spaceY = -spaceY;
+                    } else
+                    if (width > 0 && height < 0)
+                    {
+                        width = -width;
+                        spaceX = -spaceX;
+                    } else
+                    if (width < 0 && height < 0)
+                    {
+                        height = -height;
+                        spaceY = -spaceY;
+                    } else
+                    if (width < 0 && height > 0)
+                    {
+                        width = -width;
+                        spaceX = -spaceX;
+                    }
+                }
+            }
+
+
+            internal double GetDefaultSpace()
+            {
+                return 15;
+            }
         }
     }
 }

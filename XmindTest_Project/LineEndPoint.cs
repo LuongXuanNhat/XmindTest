@@ -8,10 +8,5 @@
         {
             _position = new Position();
         }
-
-        internal void AddPoint(int x, int y)
-        {
-            _position.AddPoint(x, y);
-        }
     }
 }
