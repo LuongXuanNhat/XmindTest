@@ -93,29 +93,36 @@ namespace XmindTest_Project
 
             internal double GetDefaultHeight()
             {
-                return 10;
+                // 42px 
+                return 42;
             }
 
             internal double GetDefaultWidth()
             {
-                return 30;
+                // 145px
+                return 145;
+            }
+            internal double GetDefaultSpace()
+            {
+                // 50px
+                return 50;
             }
 
-            internal void SetPositionTopic(RootNode root)
+            internal void SetDefaultPositionTopic(RootNode root)
             {
-                var width = GetDefaultWidth();  // 30
-                var height = GetDefaultHeight();  // 10
-                var spaceX = GetDefaultSpace();  // 15
-                var spaceY = GetDefaultSpace();  // 15
+                var width = GetDefaultWidth();  //      145
+                var height = GetDefaultHeight();  //    42
+                var spaceX = GetDefaultSpace();  //     50
+                var spaceY = GetDefaultSpace();  //     50
                 var position = new Position(0,0);
                 var topics = root.GetChildren();
 
                 root.SetWidth(width); root.SetHeight(height);
-                root.SetPosition(100,100);
+                root.SetPosition(620,385);
                 for (int i = 0; i < topics.Count; i++)
                 {
-                    double x = 100 + width + spaceX;
-                    double y = 100 + height + spaceY;
+                    double x = root.GetPosition().GetX() + width + spaceX;
+                    double y = root.GetPosition().GetY() + height + spaceY;
                     position = new Position(x, y);
                     topics[i].SetPosition(position);
                     topics[i].SetWidth(GetDefaultWidth());
@@ -144,10 +151,26 @@ namespace XmindTest_Project
                 }
             }
 
-
-            internal double GetDefaultSpace()
+            internal Position SetPositionTopic(BaseTopic topicParent, BaseTopic topicChild)
             {
-                return 15;
+                var position = GetPositionTopic(topicParent);
+                topicChild.SetPosition(position);
+                return position;
+            }
+
+            private Position GetPositionTopic(BaseTopic topicParent)
+            {
+                double x, y;
+                if (topicParent.GetPosition().GetX() < _root.GetPosition().GetX()) 
+                {
+                    x = topicParent.GetPosition().GetX() - GetDefaultSpace() - GetDefaultWidth();
+                    y = topicParent.GetPosition().GetY();
+                } else
+                {
+                    x = topicParent.GetPosition().GetX() + GetDefaultSpace() + GetDefaultWidth();
+                    y = topicParent.GetPosition().GetY();
+                }
+                return new Position(x, y);
             }
         }
     }

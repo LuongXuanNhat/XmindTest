@@ -16,6 +16,16 @@ namespace XmindTest_Project
         private List<BaseTopic> _children { get; set; }
         //   private List<BaseTopic> _detachedChildren { get; set; }
 
+        public BaseTopic(string title, int? width, Position? position)
+        {
+            _id = Guid.NewGuid();
+            _title = title;
+            _width = width;
+            _children = new List<BaseTopic>();
+            //       _detachedChildren ??= new List<BaseTopic>();
+            _relationship = new List<Relationship>();
+            _position = position ?? new Position() ;
+        }
         public BaseTopic(string title, int? width)
         {
             _id = Guid.NewGuid();
@@ -70,11 +80,11 @@ namespace XmindTest_Project
 
         //internal void CreateDetachedTopic(string title, int width)
         //{
-        //    _detachedChildren.Add(CreateTopic(title, width));
+        //    _detachedChildren.Add(SetPositionTopic(title, width));
         //}
         //internal BaseTopic CreateDetachedTopic(string title)
         //{
-        //    var topic = CreateTopic(title);
+        //    var topic = SetPositionTopic(title);
         //    _detachedChildren.Add(topic);
         //    return topic;
         //}
