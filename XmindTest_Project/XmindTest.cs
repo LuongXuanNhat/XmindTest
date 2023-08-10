@@ -640,5 +640,18 @@ namespace XmindTest_Project
             Assert.Equal(positionExpected2.GetX(), childOfLastTopic.GetPosition().GetX());
             Assert.Equal(positionExpected2.GetY(), childOfLastTopic.GetPosition().GetY());
         }
+
+        [Fact]
+        public void Check_The_Position_Of_Topic_When_Deleting_Another_Topic()
+        {
+            var xmindService = new XmindService();
+            var root = CreateDefaultRoot();
+            var firstTopic = root.GetChildren().First();
+
+            xmindService.SetDefaultPositionTopic(root);
+            root.DeleteChildrenFromId(firstTopic.GetId());
+
+
+        }
     }
 }
