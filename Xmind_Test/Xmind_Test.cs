@@ -210,8 +210,8 @@ namespace Xmind_Test
             var sub5 = root.CreateTopic("Topic 5");
 
             Assert.Equal(7, root.GetChildren().Count);
-            Assert.Equal(1, sub1.GetChildren().Count);
-            Assert.Equal(1, sub4.GetChildren().Count);
+            Assert.Single( sub1.GetChildren());
+            Assert.Single( sub4.GetChildren());
 
             sub5.MoveTopics(parentSet, idSet, root);
 
@@ -258,8 +258,8 @@ namespace Xmind_Test
             var childOfSub5 = sub5.CreateTopic("Subtopic 5.1");
 
             Assert.Equal(6, root.GetChildren().Count);
-            Assert.Equal(1, sub1.GetChildren().Count);
-            Assert.Equal(1, sub4.GetChildren().Count);
+            Assert.Single(sub1.GetChildren());
+            Assert.Single(sub4.GetChildren());
 
             childOfSub5.MoveTopics(objectSet, idtSet, root);
 
@@ -435,42 +435,17 @@ namespace Xmind_Test
         }
 
         [Fact]
-        public void Set_Position_Topic()
+        public void Set_Position_Default_Topic()
         {
             var xmindService = new XmindService();
-            var root = CreateDefaultRoot();
 
-            xmindService.SetDefaultPositionTopic(root);
-            var firstTopic = root.GetChildren().First();
-            var positionFirstTopic = firstTopic.GetPosition();
-            var x = root.GetPosition().GetX() + xmindService.GetDefaultWidth() + xmindService.GetDefaultSpace();
-            var y = root.GetPosition().GetY() + xmindService.GetDefaultHeight() + xmindService.GetDefaultSpace();
-            var positionExpected = new Position(x, y);
+            CreateDefaultRoot();
+            xmindService.PositionArrangementOfNodes();
+            var root = xmindService.GetRootNode();
+            var positionRoot = root.GetPosition();
 
-            Assert.Equal(620, root.GetPosition().GetX());
-            Assert.Equal(385, root.GetPosition().GetY());
-            Assert.Equal(positionExpected.GetX(), positionFirstTopic.GetX());
-            Assert.Equal(positionExpected.GetY(), positionFirstTopic.GetY());
-        }
-
-        [Fact]
-        public void Check_Child_Is_In_The_Correct_Position()
-        {
-            var xmindService = new XmindService();
-            var root = CreateDefaultRoot();
-
-            xmindService.SetDefaultPositionTopic(root);
-            var firstTopic = root.GetChildren().First();
-            var lastTopic = root.GetChildren().Last();
-            var childOfFirstTopic = firstTopic.CreateTopic("Subtopic 1");
-            var childOfLastTopic = lastTopic.CreateTopic("Subtopic 2");
-            var positionExpected1 = xmindService.SetPositionTopic(firstTopic, childOfFirstTopic);
-            var positionExpected2 = xmindService.SetPositionTopic(lastTopic, childOfLastTopic);
-
-            Assert.Equal(positionExpected1.GetX(), childOfFirstTopic.GetPosition().GetX());
-            Assert.Equal(positionExpected1.GetY(), childOfFirstTopic.GetPosition().GetY());
-            Assert.Equal(positionExpected2.GetX(), childOfLastTopic.GetPosition().GetX());
-            Assert.Equal(positionExpected2.GetY(), childOfLastTopic.GetPosition().GetY());
+            Assert.NotEqual(0,positionRoot.GetX());
+            Assert.NotEqual(0, positionRoot.GetY());
         }
     }
 }

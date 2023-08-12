@@ -23,6 +23,7 @@ namespace Xmind_Test
             _children = new List<BaseNode>();
             _relationship = new List<Relationship>();
             _note = new Note();
+            _title = string.Empty;
             _position = new Position();
         }
         public BaseNode(string title ) {

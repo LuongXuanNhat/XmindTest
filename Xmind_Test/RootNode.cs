@@ -18,8 +18,8 @@
         {
             for (int i = 0; i < numberDefaultTopic; i++)
             {
-                var titleDefault = title + (i+1);
-                var topic = new BaseNode(title);
+                string titleDefault = string.Format("{0} {1}", title, i+1);
+                var topic = new BaseNode(titleDefault);
                 AddTopic(topic);
             }
         }

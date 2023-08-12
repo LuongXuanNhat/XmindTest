@@ -6,6 +6,7 @@
 
         public Note()
         {
+            _content = string.Empty;
         }
 
         public Note(string content)
