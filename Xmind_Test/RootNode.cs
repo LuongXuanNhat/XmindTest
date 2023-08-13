@@ -22,6 +22,7 @@
                 var topic = new BaseNode(titleDefault);
                 AddTopic(topic);
             }
+            
         }
 
         internal BaseNode CreateDetachedTopic(string title)
@@ -83,8 +84,8 @@
 
         internal void DeleteAll()
         {
-            DeleteAllChildren();
-            _detachedChildren.Clear();
+            this.DeleteAllChildren();
+            this._detachedChildren.Clear();
         }
 
         internal void RemoveDetachedChildrenFromId(Guid idGuid)

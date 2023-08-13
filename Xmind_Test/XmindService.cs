@@ -36,6 +36,7 @@
             _root.SetPosition(positionRoot);
             _root.CreateDefaultTopic(numberDefaultTopic ,title);
             SetWidthHeight(_root);
+            PositionArrangementOfNodes();
             return _root;
         }
 
@@ -107,6 +108,7 @@
         internal void PositionArrangementOfNodes()
         {
             SetPositionForRightTopics();
+            if (_root.GetChildren().Count < 2) return;
             SetPositionForLeftTopics();
         }
 

@@ -437,15 +437,68 @@ namespace Xmind_Test
         [Fact]
         public void Set_Position_Default_Topic()
         {
-            var xmindService = new XmindService();
-
-            CreateDefaultRoot();
-            xmindService.PositionArrangementOfNodes();
-            var root = xmindService.GetRootNode();
+            // var xmindService = new XmindService();
+            //CreateDefaultRoot();
+            //xmindService.PositionArrangementOfNodes();
+            var root = CreateDefaultRoot();
             var positionRoot = root.GetPosition();
 
-            Assert.NotEqual(0,positionRoot.GetX());
-            Assert.NotEqual(0, positionRoot.GetY());
+            Assert.Equal(620,positionRoot.GetX());
+            Assert.Equal(385, positionRoot.GetY());
         }
+
+        [Fact]
+        public void Check_Position_Of_One_New_Topic()
+        {
+            var xmindService = new XmindService();
+            var root = xmindService.GetRootNode();
+            xmindService.DeleteAll();
+            Assert.Empty(root.GetChildren());
+
+            root.CreateTopic("Main Topic 1");
+            xmindService.PositionArrangementOfNodes();
+            var firstChild = root.GetChildren().First();
+            var position = firstChild.GetPosition();
+
+            Assert.Equal(865, position.GetX());
+            Assert.Equal(385, position.GetY());
+        }
+
+        [Fact]
+        public void Check_Position_Of_Two_New_Topic()
+        {
+            var xmindService = new XmindService();
+            var root = xmindService.GetRootNode();
+            xmindService.DeleteAll();
+            Assert.Empty(root.GetChildren());
+
+            root.CreateTopic("Main Topic 1");
+            root.CreateTopic("Main Topic 2");
+            xmindService.PositionArrangementOfNodes();
+            var secondChild = root.GetChildren().Last();
+            var position = secondChild.GetPosition();
+
+            Assert.Equal(520, position.GetX());
+            Assert.Equal(385, position.GetY());
+        }
+
+        [Fact]
+        public void Check_Position_Of_Third_New_Topic()
+        {
+            var xmindService = new XmindService();
+            var root = xmindService.GetRootNode();
+            xmindService.DeleteAll();
+            Assert.Empty(root.GetChildren());
+
+            root.CreateTopic("Main Topic 1");
+            root.CreateTopic("Main Topic 2");
+            root.CreateTopic("Main Topic 3");
+            xmindService.PositionArrangementOfNodes();
+            var thirdChild = root.GetChildren().Last();
+            var position = thirdChild.GetPosition();
+
+        }
+
+
     }
 }
