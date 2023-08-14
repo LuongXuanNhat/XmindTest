@@ -437,14 +437,23 @@ namespace Xmind_Test
         [Fact]
         public void Set_Position_Default_Topic()
         {
-            // var xmindService = new XmindService();
-            //CreateDefaultRoot();
-            //xmindService.PositionArrangementOfNodes();
-            var root = CreateDefaultRoot();
+            var xmindService = new XmindService();
+            var root = xmindService.GetRootNode();
+
+            xmindService.PositionArrangementOfNodes();
+
             var positionRoot = root.GetPosition();
+            var firstTopic = root.GetChildren().First();
+            var lastTopic = root.GetChildren().Last();
+            var positionFirstTopic = firstTopic.GetPosition();
+            var positionLastTopic = lastTopic.GetPosition();
 
             Assert.Equal(620,positionRoot.GetX());
             Assert.Equal(385, positionRoot.GetY());
+            Assert.Equal(865, positionFirstTopic.GetX());
+            Assert.Equal(485, positionFirstTopic.GetY());
+            Assert.Equal(520, positionLastTopic.GetX());
+            Assert.Equal(485, positionLastTopic.GetY());
         }
 
         [Fact]
@@ -483,16 +492,17 @@ namespace Xmind_Test
         }
 
         [Fact]
-        public void Check_Position_Of_Third_New_Topic()
+        public void Check_Position_Of_New_SubTopic()
         {
             var xmindService = new XmindService();
             var root = xmindService.GetRootNode();
-            xmindService.DeleteAll();
-            Assert.Empty(root.GetChildren());
+            var firstTopic = root.GetChildren().First();
+            var childTopic1 = firstTopic.CreateTopic("Subtopic 1");
+            var childTopic2 = firstTopic.CreateTopic("Subtopic 2");
+            var childTopic3 = firstTopic.CreateTopic("Subtopic 3");
+            var childTopic4 = firstTopic.CreateTopic("Subtopic 4");
+            var secondTopic = root.GetChildren()[1];
 
-            root.CreateTopic("Main Topic 1");
-            root.CreateTopic("Main Topic 2");
-            root.CreateTopic("Main Topic 3");
             xmindService.PositionArrangementOfNodes();
             var thirdChild = root.GetChildren().Last();
             var position = thirdChild.GetPosition();
