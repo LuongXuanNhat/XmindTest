@@ -1,4 +1,6 @@
-﻿namespace Xmind_Test
+﻿using System.Drawing;
+
+namespace Xmind_Test
 {
     internal class XmindService
     {
@@ -9,6 +11,8 @@
         private int _defaultHeightSubTopic = 30;
         private int _defaultSpaceTopic = 100;
         private int _defaultSpaceSubTopic = 60;
+        private readonly string drawLeft = "left";
+        private readonly string drawRight = "right";
 
         private string _defaultTitleTopic = "Main topic";
         private string _defaultTitleRelationship = "Relationship";
@@ -116,28 +120,38 @@
         internal void SortNodes()
         {
             var childrenHeight = GetChildrenHeight();
-            var topicsHeight = 0;
-            var spaceChild = 0;
+            var leftHeight = 0;
+            var rightHeight = 0;
+            var heightOfLeftTopic = 0;
+            var heightOfRightTopic = 0;
+            var firstTopicId = _root.GetChildren().First().GetId();
 
             foreach (var topic in _root.GetChildren())
             {
-                topicsHeight += topic.GetTopicHeight(_defaultHeightTopic, _defaultHeightSubTopic);
-                if (topicsHeight < childrenHeight / 2 || topic == _root.GetChildren().First())
+                rightHeight += topic.GetTopicHeight(_defaultHeightTopic, _defaultHeightSubTopic);
+                if (rightHeight > childrenHeight / 2)
                 {
-                    var topicHeight = ArrangeTopicNodes(_root, topic, childrenHeight);
-                    spaceChild += topicHeight;
+                    break;
+                }
+            }
+
+            leftHeight = childrenHeight - rightHeight;
+
+            foreach (var topic in _root.GetChildren())
+            {
+                if (heightOfRightTopic < childrenHeight / 2 || topic.GetId().Equals(firstTopicId))
+                {
+                    heightOfRightTopic += ArrangeTopicNodes(_root, topic, rightHeight , drawRight, heightOfRightTopic);
                 }   
                 else
                 {
-                    var topicHeight = ArrangeTopicNodes(_root, topic, childrenHeight);
-                    spaceChild += topicHeight;
-                }
-                    
+                    heightOfLeftTopic += ArrangeTopicNodes(_root, topic, leftHeight, drawLeft, heightOfLeftTopic);
+                }   
             }
 
         }
 
-        private int ArrangeTopicNodes(BaseNode parentNode, BaseNode topic,int parentHeight, int? spaceNode = 0)
+        private int ArrangeTopicNodes(BaseNode parentNode, BaseNode topic,int parentHeight, string drawingSide , int? spaceNode = 0 )
         {
             var childrenHeight = topic.GetTopicHeight(_defaultSpaceTopic, _defaultSpaceSubTopic);
             var parentPosition = parentNode.GetPosition();
@@ -146,15 +160,21 @@
             // Get Middle Position -> Get min,max position
             var positionMaxY = parentPosition.GetY() - _defaultHeightTopic / 2 + parentHeight / 2 - spaceNode.Value;
             var positionMinY = positionMaxY - childrenHeight;
-            var topicMiddlePosition = SetMiddleTopicPosition(parentNode, positionMaxY, positionMinY);
-            topic.SetPosition(topicMiddlePosition.GetX() + _defaultSpaceTopic, topicMiddlePosition.GetY() + topic.GetHeight()/2);
-            
+
+            if (drawingSide.Equals("right")) {
+                var topicMiddlePosition = SetMiddleLeftTopicPosition(parentNode, positionMaxY, positionMinY);
+                topic.SetPosition(topicMiddlePosition.GetX() + _defaultSpaceTopic, topicMiddlePosition.GetY() + topic.GetHeight() / 2);
+            } else
+            {
+                var topicMiddlePosition = SetMiddleRightTopicPosition(parentNode, positionMaxY, positionMinY);
+                topic.SetPosition(topicMiddlePosition.GetX() - _defaultSpaceTopic, topicMiddlePosition.GetY() + topic.GetHeight() / 2);
+            }
 
             if (topic.GetChildren().Any())
             {
                 foreach (var child in topic.GetChildren())
                 {
-                    ArrangeChildrenNode(topic, child, childrenHeight, spaceChild);
+                    ArrangeChildrenNode(topic, child, childrenHeight, drawingSide,spaceChild);
                     spaceChild += child.GetChidrenHeight(_defaultSpaceSubTopic);
                 }
             }
@@ -162,7 +182,7 @@
             return childrenHeight;
         }
 
-        private void ArrangeChildrenNode(BaseNode parentNode, BaseNode topic, int parentHeight, int? spaceNode = 0)
+        private void ArrangeChildrenNode(BaseNode parentNode, BaseNode topic, int parentHeight, string drawingSide, int? spaceNode = 0)
         {
             var childrenHeight = topic.GetChidrenHeight(_defaultSpaceSubTopic);
             var parentPosition = parentNode.GetPosition();
@@ -171,23 +191,36 @@
             // Get Middle Position -> Get min,max position
             var positionMaxY = parentPosition.GetY() - _defaultHeightTopic / 2 + parentHeight / 2 - spaceNode.Value;
             var positionMinY = positionMaxY - childrenHeight;
-            var topicMiddlePosition = SetMiddleTopicPosition(parentNode, positionMaxY, positionMinY);
-
-            topic.SetPosition(topicMiddlePosition.GetX() + _defaultSpaceSubTopic, topicMiddlePosition.GetY() + topic.GetHeight() / 2);
+            if (drawingSide.Equals("right"))
+            {
+                var topicMiddlePosition = SetMiddleLeftTopicPosition(parentNode, positionMaxY, positionMinY);
+                topic.SetPosition(topicMiddlePosition.GetX() + _defaultSpaceSubTopic, topicMiddlePosition.GetY() + topic.GetHeight() / 2);
+            }
+            else
+            {
+                var topicMiddlePosition = SetMiddleRightTopicPosition(parentNode, positionMaxY, positionMinY);
+                topic.SetPosition(topicMiddlePosition.GetX() - _defaultSpaceSubTopic - _defaultWidth, topicMiddlePosition.GetY() + topic.GetHeight() / 2);
+            }
 
             if (topic.GetChildren().Any())
             {
                 foreach (var child in topic.GetChildren())
                 {
-                    ArrangeChildrenNode(topic, child, childrenHeight, spaceChild);
+                    ArrangeChildrenNode(topic, child, childrenHeight, drawingSide, spaceChild);
                     spaceChild += child.GetChidrenHeight(_defaultSpaceSubTopic);
                 }
             }
         }
 
-        private Position SetMiddleTopicPosition(BaseNode parentNode, int positionMaxY, int positionMinY)
+        private Position SetMiddleLeftTopicPosition(BaseNode parentNode, int positionMaxY, int positionMinY)
         {
             var x = parentNode.GetPosition().GetX() + _defaultWidth;
+            var y = (positionMaxY + positionMinY) / 2;
+            return new Position(x,y);
+        }
+         private Position SetMiddleRightTopicPosition(BaseNode parentNode, int positionMaxY, int positionMinY)
+        {
+            var x = parentNode.GetPosition().GetX();
             var y = (positionMaxY + positionMinY) / 2;
             return new Position(x,y);
         }

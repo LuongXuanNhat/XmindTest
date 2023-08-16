@@ -435,7 +435,7 @@ namespace Xmind_Test
         }
 
         [Fact]
-        public void Check_Position_Of_New_SubTopics()
+        public void Check_Children_Height()
         {
             var xmindService = new XmindService();
             var spaceTopic   = xmindService.GetDefaultSpaceTopic();
@@ -465,23 +465,67 @@ namespace Xmind_Test
             var subtopic4 = childTopic5.CreateTopic("Subtopic 13", height);
 
             // 4st level 
-            var subChild1SubTopic2 = subtopic2.CreateTopic("Subtopic 21", height);
-            var subChild2SubTopic2 = subtopic2.CreateTopic("Subtopic 22", height);
-            var subChild1SubTopic3 = subtopic3.CreateTopic("Subtopic 31", height);
-            var subChild1SubTopic4 = subtopic4.CreateTopic("Subtopic 41", height);
-            var subChild2SubTopic4 = subtopic4.CreateTopic("Subtopic 42", height);
+            subtopic2.CreateTopic("Subtopic 21", height);
+            subtopic2.CreateTopic("Subtopic 22", height);
+            subtopic3.CreateTopic("Subtopic 31", height);
+            subtopic4.CreateTopic("Subtopic 41", height);
+            subtopic4.CreateTopic("Subtopic 42", height);
 
             Assert.Equal(90, subtopic3.GetChidrenHeight(subtopicSpace));
             Assert.Equal(630, firstTopic.GetTopicHeight(spaceTopic, subtopicSpace));
             Assert.Equal(140, secondTopic.GetTopicHeight(spaceTopic, subtopicSpace));
             Assert.Equal(140, thirdTopic.GetTopicHeight(spaceTopic, subtopicSpace));
             Assert.Equal(180, fourthTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+        }
+
+        [Fact]
+        public void Check_Children_Position()
+        {
+            var xmindService = new XmindService();
+            var spaceTopic   = xmindService.GetDefaultSpaceTopic();
+            var heightSubtopic = xmindService.GetDefaultHeightSubTopic();
+            var heightTopic  = xmindService.GetDefaultHeightTopic();
+            var subtopicSpace = xmindService.GetDefaultSpaceSubTopic();
+
+            // root
+            var root = xmindService.GetRootNode();
+
+            // 1st level
+            var firstTopic = root.GetChildren().First();
+            var secondTopic = root.GetChildren()[1];
+            var thirdTopic = root.GetChildren()[2];
+            var fourthTopic = root.GetChildren().Last();
+            root.CreateTopic("Main topic 5",heightTopic);
+
+            // 2st level
+            var childTopic1 = firstTopic.CreateTopic("Subtopic 1", heightSubtopic);
+            var childTopic2 = firstTopic.CreateTopic("Subtopic 2", heightSubtopic);
+            var childTopic3 = firstTopic.CreateTopic("Subtopic 3", heightSubtopic);
+
+            var childTopic4 = secondTopic.CreateTopic("Subtopic 4", heightSubtopic);
+            var childTopic5 = secondTopic.CreateTopic("Subtopic 5", heightSubtopic);
+            var childTopic6 = secondTopic.CreateTopic("Subtopic 6", heightSubtopic);
+
+            var childTopic7 = fourthTopic.CreateTopic("Subtopic 7", heightSubtopic);
+            var childTopic8 = fourthTopic.CreateTopic("Subtopic 8", heightSubtopic);
+            var childTopic9 = fourthTopic.CreateTopic("Subtopic 9", heightSubtopic);
+
+            var childTopic10 = thirdTopic.CreateTopic("Subtopic 10", heightSubtopic);
+            var childTopic11 = thirdTopic.CreateTopic("Subtopic 10", heightSubtopic);
+            var childTopic12 = thirdTopic.CreateTopic("Subtopic 10", heightSubtopic);
+
+            // 3st level
+            var subtopic1 = childTopic2.CreateTopic("Subtopic 10", heightSubtopic);
+            var subtopic2 = childTopic2.CreateTopic("Subtopic 11", heightSubtopic);
+
+            Assert.Equal(360, firstTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+            Assert.Equal(270, secondTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+            Assert.Equal(270, thirdTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+            Assert.Equal(270, fourthTopic.GetTopicHeight(spaceTopic, subtopicSpace));
 
             xmindService.SortNodes();
 
-
+           // Assert.Equal(90, firstTopic.GetPosition().GetX());
         }
-
-
     }
 }
