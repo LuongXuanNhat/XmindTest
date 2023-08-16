@@ -427,7 +427,7 @@ namespace Xmind_Test
             var xmindService = new XmindService();
             var root = CreateDefaultRoot();
             var firstChild = root.GetChildren().First();
-            var height = xmindService.GetDefaultHeight();
+            var height = xmindService.GetDefaultHeightTopic();
 
             firstChild.SetHeight(height);
 
@@ -435,77 +435,50 @@ namespace Xmind_Test
         }
 
         [Fact]
-        public void Set_Position_Default_Topic()
+        public void Check_Position_Of_New_SubTopics()
         {
             var xmindService = new XmindService();
+            var spaceTopic   = xmindService.GetDefaultSpaceTopic();
+            var height       = xmindService.GetDefaultHeightSubTopic();
+            var subtopicSpace = xmindService.GetDefaultSpaceSubTopic();
+
+            // root
             var root = xmindService.GetRootNode();
 
-            xmindService.PositionArrangementOfNodes();
-
-            var positionRoot = root.GetPosition();
+            // 1st level
             var firstTopic = root.GetChildren().First();
-            var lastTopic = root.GetChildren().Last();
-            var positionFirstTopic = firstTopic.GetPosition();
-            var positionLastTopic = lastTopic.GetPosition();
-
-            Assert.Equal(620,positionRoot.GetX());
-            Assert.Equal(385, positionRoot.GetY());
-            Assert.Equal(865, positionFirstTopic.GetX());
-            Assert.Equal(485, positionFirstTopic.GetY());
-            Assert.Equal(520, positionLastTopic.GetX());
-            Assert.Equal(485, positionLastTopic.GetY());
-        }
-
-        [Fact]
-        public void Check_Position_Of_One_New_Topic()
-        {
-            var xmindService = new XmindService();
-            var root = xmindService.GetRootNode();
-            xmindService.DeleteAll();
-            Assert.Empty(root.GetChildren());
-
-            root.CreateTopic("Main Topic 1");
-            xmindService.PositionArrangementOfNodes();
-            var firstChild = root.GetChildren().First();
-            var position = firstChild.GetPosition();
-
-            Assert.Equal(865, position.GetX());
-            Assert.Equal(385, position.GetY());
-        }
-
-        [Fact]
-        public void Check_Position_Of_Two_New_Topic()
-        {
-            var xmindService = new XmindService();
-            var root = xmindService.GetRootNode();
-            xmindService.DeleteAll();
-            Assert.Empty(root.GetChildren());
-
-            root.CreateTopic("Main Topic 1");
-            root.CreateTopic("Main Topic 2");
-            xmindService.PositionArrangementOfNodes();
-            var secondChild = root.GetChildren().Last();
-            var position = secondChild.GetPosition();
-
-            Assert.Equal(520, position.GetX());
-            Assert.Equal(385, position.GetY());
-        }
-
-        [Fact]
-        public void Check_Position_Of_New_SubTopic()
-        {
-            var xmindService = new XmindService();
-            var root = xmindService.GetRootNode();
-            var firstTopic = root.GetChildren().First();
-            var childTopic1 = firstTopic.CreateTopic("Subtopic 1");
-            var childTopic2 = firstTopic.CreateTopic("Subtopic 2");
-            var childTopic3 = firstTopic.CreateTopic("Subtopic 3");
-            var childTopic4 = firstTopic.CreateTopic("Subtopic 4");
             var secondTopic = root.GetChildren()[1];
+            var thirdTopic = root.GetChildren()[2];
+            var fourthTopic = root.GetChildren().Last();
 
-            xmindService.PositionArrangementOfNodes();
-            var thirdChild = root.GetChildren().Last();
-            var position = thirdChild.GetPosition();
+            // 2st level
+            var childTopic1 = firstTopic.CreateTopic("Subtopic 1", height);
+            var childTopic2 = firstTopic.CreateTopic("Subtopic 2", height);
+            var childTopic3 = firstTopic.CreateTopic("Subtopic 3", height);
+            var childTopic4 = firstTopic.CreateTopic("Subtopic 4", height);
+            var childTopic5 = fourthTopic.CreateTopic("Subtopic 5", height);
+
+            // 3st level
+            var subtopic1 = childTopic2.CreateTopic("Subtopic 10", height);
+            var subtopic2 = childTopic2.CreateTopic("Subtopic 11", height);
+            var subtopic3 = childTopic2.CreateTopic("Subtopic 12", height);
+            var subtopic4 = childTopic5.CreateTopic("Subtopic 13", height);
+
+            // 4st level 
+            var subChild1SubTopic2 = subtopic2.CreateTopic("Subtopic 21", height);
+            var subChild2SubTopic2 = subtopic2.CreateTopic("Subtopic 22", height);
+            var subChild1SubTopic3 = subtopic3.CreateTopic("Subtopic 31", height);
+            var subChild1SubTopic4 = subtopic4.CreateTopic("Subtopic 41", height);
+            var subChild2SubTopic4 = subtopic4.CreateTopic("Subtopic 42", height);
+
+            Assert.Equal(90, subtopic3.GetChidrenHeight(subtopicSpace));
+            Assert.Equal(630, firstTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+            Assert.Equal(140, secondTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+            Assert.Equal(140, thirdTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+            Assert.Equal(180, fourthTopic.GetTopicHeight(spaceTopic, subtopicSpace));
+
+            xmindService.SortNodes();
+
 
         }
 

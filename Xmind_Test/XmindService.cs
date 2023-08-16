@@ -5,25 +5,21 @@
         private RootNode _root;
         private int _defaultTopicNumber = 4;
         private int _defaultWidth = 145;
-        private int _defaultHeight = 42;
-        private int _defaultSpace = 100;
+        private int _defaultHeightTopic = 40;
+        private int _defaultHeightSubTopic = 30;
+        private int _defaultSpaceTopic = 100;
+        private int _defaultSpaceSubTopic = 60;
+
         private string _defaultTitleTopic = "Main topic";
         private string _defaultTitleRelationship = "Relationship";
-        private Position _positionRoot = new Position(620, 385) ;
+        private Position _positionRoot = new Position(620, 385);
 
-        private List<Position> _leftPositions;
-        private List<Position> _rightPositions;
-        private List<List<Position>> _leftRightPositionOfRoot;
 
 
         public XmindService(RootNode? root = null)
         {
             _root = root ?? CreateNewMap();
-            _leftRightPositionOfRoot = new List<List<Position>>();
-            _leftPositions = new List<Position>();
-            _rightPositions = new List<Position>();
-            _leftRightPositionOfRoot.Add(_leftPositions);
-            _leftRightPositionOfRoot.Add(_rightPositions);
+ 
         }
 
         internal RootNode CreateNewMap()
@@ -31,19 +27,19 @@
             var title = GetDefaultTitleTopic();
             var numberDefaultTopic = GetNumberDefaultTopic();
             var positionRoot = GetDefaultPositionRoot();
+            var height = GetDefaultHeightTopic();
 
             _root = new RootNode("Central Topic");
             _root.SetPosition(positionRoot);
-            _root.CreateDefaultTopic(numberDefaultTopic ,title);
+            _root.CreateDefaultTopic(numberDefaultTopic, title, height);
             SetWidthHeight(_root);
-            PositionArrangementOfNodes();
             return _root;
         }
 
         private void SetWidthHeight(BaseNode baseNode)
         {
             baseNode.SetWidth(_defaultWidth);
-            baseNode.SetHeight(_defaultHeight);
+            baseNode.SetHeight(_defaultHeightTopic);
         }
 
         private Position GetDefaultPositionRoot()
@@ -93,183 +89,117 @@
             return _defaultWidth;
         }
 
-        internal int GetDefaultHeight()
+        internal int GetDefaultHeightTopic()
         {
             // 42px 
-            return _defaultHeight;
+            return _defaultHeightTopic;
         }
 
-        internal int GetDefaultSpace()
+        internal int GetDefaultHeightSubTopic()
         {
-            // 50px
-            return _defaultSpace;
+            // 30
+            return _defaultHeightSubTopic;
         }
 
-        internal void PositionArrangementOfNodes()
+        internal int GetDefaultSpaceTopic()
         {
-            int topicNumber = (_root.GetChildren().Count + 1) / 2;
-            SetPositionForRightTopics(_root, _positionRoot, topicNumber);
-            if (_root.GetChildren().Count < 2) return;
-            SetPositionForLeftTopics(_root, _positionRoot, topicNumber);
+            // 100px
+            return _defaultSpaceTopic;
         }
-        internal void PositionArrangementOfTopics()
+
+        internal int GetDefaultSpaceSubTopic()
         {
+            // 60
+            return _defaultSpaceSubTopic;
+        }
+
+        internal void SortNodes()
+        {
+            var childrenHeight = GetChildrenHeight();
+            var topicsHeight = 0;
+            var spaceChild = 0;
+
             foreach (var topic in _root.GetChildren())
             {
-                SetLocation(topic);
-            }
-        }
-
-        private void SetLocation(BaseNode topic)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void SetPositionForRightTopics(BaseNode baseNode ,Position positionParent ,int topicNumber )
-        {
-            var children = baseNode.GetChildren().Take(topicNumber);
-            int multiplier = topicNumber / 2;
-            var middleRightPositionOfRoot = GetMiddleRightPositionOfParent(positionParent);
-            var lastPosition = new Position();
-
-            foreach (var topic in children)
-            {
-                if (multiplier == 0 && topicNumber % 2 == 0)
+                topicsHeight += topic.GetTopicHeight(_defaultHeightTopic, _defaultHeightSubTopic);
+                if (topicsHeight < childrenHeight / 2 || topic == _root.GetChildren().First())
                 {
-                    multiplier--;
-                }
-                SetWidthHeight(topic);
-                var middlePosition = SetPositionRightTopic(middleRightPositionOfRoot, multiplier, lastPosition.GetY());
-                var positionTopic = SetPositionTopicFromMiddlePosition(middlePosition);
-                topic.SetPosition(positionTopic);
-                multiplier--;
-                if (topic.GetChildren().Count != 0)
+                    var topicHeight = ArrangeTopicNodes(_root, topic, childrenHeight);
+                    spaceChild += topicHeight;
+                }   
+                else
                 {
-                    lastPosition = SetPositionForRightSubTopics(topic, positionTopic);
+                    var topicHeight = ArrangeTopicNodes(_root, topic, childrenHeight);
+                    spaceChild += topicHeight;
                 }
+                    
             }
+
         }
 
-        private Position SetPositionForRightSubTopics(BaseNode topic, Position positionTopic)
+        private int ArrangeTopicNodes(BaseNode parentNode, BaseNode topic,int parentHeight, int? spaceNode = 0)
         {
-            var children = topic.GetChildren();
-            var childrenNumber = children.Count;
-            int multiplier = childrenNumber / 2;
-            var middleRightPositionOfParent = GetMiddleRightPositionOfParent(positionTopic);
-            var positionSubtopic = new Position();
-            var lastPosition = new Position();
+            var childrenHeight = topic.GetTopicHeight(_defaultSpaceTopic, _defaultSpaceSubTopic);
+            var parentPosition = parentNode.GetPosition();
+            var spaceChild = 0;
 
-            foreach (var subtopic in children)
+            // Get Middle Position -> Get min,max position
+            var positionMaxY = parentPosition.GetY() - _defaultHeightTopic / 2 + parentHeight / 2 - spaceNode.Value;
+            var positionMinY = positionMaxY - childrenHeight;
+            var topicMiddlePosition = SetMiddleTopicPosition(parentNode, positionMaxY, positionMinY);
+            topic.SetPosition(topicMiddlePosition.GetX() + _defaultSpaceTopic, topicMiddlePosition.GetY() + topic.GetHeight()/2);
+            
+
+            if (topic.GetChildren().Any())
             {
-                if (multiplier == 0 && childrenNumber % 2 == 0)
+                foreach (var child in topic.GetChildren())
                 {
-                    multiplier--;
+                    ArrangeChildrenNode(topic, child, childrenHeight, spaceChild);
+                    spaceChild += child.GetChidrenHeight(_defaultSpaceSubTopic);
                 }
-                SetWidthHeight(subtopic);
-                var middlePosition = SetPositionRightTopic(middleRightPositionOfParent, multiplier);
-                positionSubtopic = SetPositionTopicFromMiddlePosition(middlePosition);
-                subtopic.SetPosition(positionSubtopic);
-                multiplier--;
-                if (subtopic.GetChildren().Count != 0) { 
-                    lastPosition = SetPositionForRightSubTopics(subtopic, positionSubtopic);
-                } 
             }
-            return positionSubtopic;
+
+            return childrenHeight;
         }
 
-        private void SetPositionForLeftTopics(BaseNode baseNode, Position positionParent, int topicNumber)
+        private void ArrangeChildrenNode(BaseNode parentNode, BaseNode topic, int parentHeight, int? spaceNode = 0)
         {
-            int subNumber = (baseNode.GetChildren().Count + 1) / 2;
-            var middleLeftPositionOfRoot = GetMiddleLeftPositionOfParent(positionParent);
-            var children = baseNode.GetChildren().Skip(subNumber).Take(topicNumber);
-            int multiplier = topicNumber / 2;
+            var childrenHeight = topic.GetChidrenHeight(_defaultSpaceSubTopic);
+            var parentPosition = parentNode.GetPosition();
+            var spaceChild = 0;
 
-            multiplier = -multiplier;
+            // Get Middle Position -> Get min,max position
+            var positionMaxY = parentPosition.GetY() - _defaultHeightTopic / 2 + parentHeight / 2 - spaceNode.Value;
+            var positionMinY = positionMaxY - childrenHeight;
+            var topicMiddlePosition = SetMiddleTopicPosition(parentNode, positionMaxY, positionMinY);
 
-            foreach (var topic in children)
+            topic.SetPosition(topicMiddlePosition.GetX() + _defaultSpaceSubTopic, topicMiddlePosition.GetY() + topic.GetHeight() / 2);
+
+            if (topic.GetChildren().Any())
             {
-                if (multiplier == 0 && topicNumber % 2 == 0)
+                foreach (var child in topic.GetChildren())
                 {
-                    multiplier++;
+                    ArrangeChildrenNode(topic, child, childrenHeight, spaceChild);
+                    spaceChild += child.GetChidrenHeight(_defaultSpaceSubTopic);
                 }
-                SetWidthHeight(topic);
-                var middlePosition = SetPositionLeftTopic(middleLeftPositionOfRoot, multiplier);
-                var positionSubtopic = SetPositionTopicFromMiddlePosition(middlePosition);
-                topic.SetPosition(positionSubtopic);
-                multiplier++;
-                if (topic.GetChildren().Count != 0) SetPositionForLeftSubTopics(topic, positionSubtopic);
-
-            }
-        }
-        private void SetPositionForLeftSubTopics(BaseNode topic, Position positionTopic)
-        {
-            var children = topic.GetChildren();
-            var childrenNumber = children.Count;
-            int multiplier = childrenNumber / 2;
-            var middleLeftPositionOfParent = GetMiddleLeftPositionOfParent(positionTopic);
-            multiplier = -multiplier;
-
-            foreach (var subtopic in children)
-            {
-                if (multiplier == 0 && childrenNumber % 2 == 0)
-                {
-                    multiplier++;
-                }
-                SetWidthHeight(subtopic);
-                var middlePosition = SetPositionLeftTopic(middleLeftPositionOfParent, multiplier);
-                var positionSubtopic = SetPositionTopicFromMiddlePosition(middlePosition);
-                subtopic.SetPosition(positionTopic);
-                multiplier++;
-                if (subtopic.GetChildren().Count != 0) SetPositionForLeftSubTopics(subtopic, positionTopic);
             }
         }
 
-
-        internal Position SetPositionRightTopic(Position topRightPosition, int multiplier, int? lastPosition = 0)
+        private Position SetMiddleTopicPosition(BaseNode parentNode, int positionMaxY, int positionMinY)
         {
-            var x = topRightPosition.GetX() + _defaultSpace;
-            var y = 0;
-            if (lastPosition != 0 && topRightPosition.GetY() > lastPosition.Value)
+            var x = parentNode.GetPosition().GetX() + _defaultWidth;
+            var y = (positionMaxY + positionMinY) / 2;
+            return new Position(x,y);
+        }
+
+        private int GetChildrenHeight()
+        {
+            var childrenHeight = 0;
+            foreach (var topic in _root.GetChildren())
             {
-                y = lastPosition.Value - _defaultSpace - _defaultHeight/2;
-            } else
-            {
-                y = topRightPosition.GetY() + _defaultSpace * multiplier;
+                childrenHeight += topic.GetTopicHeight(_defaultSpaceTopic, _defaultSpaceSubTopic);
             }
-            return new Position(x, y);
-        }
-        internal Position SetPositionLeftTopic(Position topRightPosition, int multiplier)
-        {
-            var x = topRightPosition.GetX() - _defaultSpace;
-            var y = topRightPosition.GetY() + _defaultSpace * multiplier;
-            return new Position(x, y);
-        }
-
-        internal Position SetPositionTopicFromMiddlePosition(Position middlePosition)
-        {
-            var x = middlePosition.GetX();
-            var y = middlePosition.GetY() + _defaultHeight /2 ;
-
-            return new Position(x, y);
-        }
-        
-        internal Position GetMiddleRightPositionOfParent(Position positionRoot)
-        {
-            var x = positionRoot.GetX() + _defaultWidth;
-            var y = positionRoot.GetY() - _defaultHeight/2 ;
-            return new Position(x, y);
-        }
-
-        internal Position GetMiddleLeftPositionOfParent(Position positionRoot)
-        {
-            var x = positionRoot.GetX();
-            var y = positionRoot.GetY() - _defaultHeight/2 ;
-            return new Position(x, y);
-        }
-
-        internal BaseNode CreateTopic(BaseNode parent)
-        {
-            throw new NotImplementedException();
+            return childrenHeight;
         }
     }
 }

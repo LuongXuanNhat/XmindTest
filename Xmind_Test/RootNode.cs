@@ -14,12 +14,13 @@
             _detachedChildren = new List<BaseNode>();
         }
 
-        internal void CreateDefaultTopic(int numberDefaultTopic, string title)
+        internal void CreateDefaultTopic(int numberDefaultTopic, string title, int height)
         {
+            var parentId = this.GetId();
             for (int i = 0; i < numberDefaultTopic; i++)
             {
                 string titleDefault = string.Format("{0} {1}", title, i+1);
-                var topic = new BaseNode(titleDefault);
+                var topic = new BaseNode(titleDefault, height);
                 AddTopic(topic);
             }
             
@@ -27,6 +28,7 @@
 
         internal BaseNode CreateDetachedTopic(string title)
         {
+            var parentId = this.GetId();
             var detachedTopic = new BaseNode(title);
             AddDetachedTopic(detachedTopic);
             return detachedTopic;

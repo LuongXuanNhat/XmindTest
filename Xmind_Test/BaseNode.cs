@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit.Abstractions;
-
-namespace Xmind_Test
+﻿namespace Xmind_Test
 {
     public class BaseNode
     {
@@ -26,13 +19,24 @@ namespace Xmind_Test
             _title = string.Empty;
             _position = new Position();
         }
-        public BaseNode(string title ) {
+        public BaseNode(string title)
+        {
             _id = Guid.NewGuid();
             _title = title;
             _children = new List<BaseNode>();
             _relationship = new List<Relationship>();
             _note = new Note();
             _position = new Position();
+        }
+        public BaseNode(string title, int height)
+        {
+            _id = Guid.NewGuid();
+            _title = title;
+            _children = new List<BaseNode>();
+            _relationship = new List<Relationship>();
+            _note = new Note();
+            _position = new Position();
+            _height = height;
         }
 
         internal void AddTopic(BaseNode children)
@@ -48,6 +52,12 @@ namespace Xmind_Test
         internal BaseNode CreateTopic(string title)
         {
             var topic = new BaseNode(title);
+            AddTopic(topic);
+            return topic;
+        }
+        internal BaseNode CreateTopic(string title, int height)
+        {
+            var topic = new BaseNode(title, height);
             AddTopic(topic);
             return topic;
         }
@@ -68,7 +78,8 @@ namespace Xmind_Test
                     idSet.Remove(child.GetId());
                     if (GetChildren().Count > 1)
                         child.CreateTopics(idSet, titleTopic);
-                } else
+                }
+                else
                 {
                     if (GetChildren().Count > 0)
                         child.CreateTopics(idSet, titleTopic);
@@ -175,6 +186,35 @@ namespace Xmind_Test
         internal void SetPosition(Position position)
         {
             _position = position;
+        }
+
+        internal int GetTopicHeight(int spaceTopic, int spaceSubTopic)
+        {
+            var heightTopic = _height + spaceTopic;
+            var heightChild = 0;
+            if (_children.Any())
+            {
+                foreach (var child in _children)
+                {
+                    heightChild += child.GetChidrenHeight(spaceSubTopic);
+                }
+            }
+            else return heightTopic;
+            return heightChild > heightTopic ? heightChild : heightTopic;
+        }
+
+        internal int GetChidrenHeight(int spaceSubTopic)
+        {
+            var height = 0;
+            if (_children.Any())
+            {
+                foreach (var child in _children)
+                {
+                    height += child.GetChidrenHeight(spaceSubTopic);
+                }
+            }
+            else return _height + spaceSubTopic;
+            return height;
         }
     }
 }
